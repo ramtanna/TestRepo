@@ -1,0 +1,4 @@
+1.git init command creates a new Git repository/converts an existing, unversioned project to a Git repository/initializes a new empty repository. This command creates a .git subdirectory in the project root, which contains all of the necessary metadata for the repo.
+
+	git init repo1
+	cd repo1

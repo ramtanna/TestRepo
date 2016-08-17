@@ -1,0 +1,3542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Gerrit Code Review - /changes/ REST API</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Gerrit Code Review - /changes/ REST API</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>This page describes the change related REST endpoints.
+Please also take note of the general information on the
+<a href="rest-api.html">REST API</a>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="change-endpoints">Change Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="list-changes">Query Changes</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Queries changes visible to the caller. The query string must be
+provided by the <tt>q</tt> parameter. The <tt>n</tt> parameter can be used to limit
+the returned results.</p></div>
+<div class="paragraph"><p>As result a list of <a href="#change-info">ChangeInfo</a> entries is returned.
+The change output is sorted by the last update time, most recently
+updated to oldest updated.</p></div>
+<div class="paragraph"><p>Query for open changes of watched projects:</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/?q=status:open+is:watched&amp;n=2 HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    {
+      "kind": "gerritcodereview#change",
+      "id": "demo~master~Idaf5e098d70898b7119f6f4af5a6c13343d64b57",
+      "project": "demo",
+      "branch": "master",
+      "change_id": "Idaf5e098d70898b7119f6f4af5a6c13343d64b57",
+      "subject": "One change",
+      "status": "NEW",
+      "created": "2012-07-17 07:18:30.854000000",
+      "updated": "2012-07-17 07:19:27.766000000",
+      "reviewed": true,
+      "mergeable": true,
+      "_sortkey": "001e7057000006dc",
+      "_number": 1756,
+      "owner": {
+        "name": "John Doe"
+      },
+    },
+    {
+      "kind": "gerritcodereview#change",
+      "id": "demo~master~I09c8041b5867d5b33170316e2abc34b79bbb8501",
+      "project": "demo",
+      "branch": "master",
+      "change_id": "I09c8041b5867d5b33170316e2abc34b79bbb8501",
+      "subject": "Another change",
+      "status": "NEW",
+      "created": "2012-07-17 07:18:30.884000000",
+      "updated": "2012-07-17 07:18:30.885000000",
+      "mergeable": true,
+      "_sortkey": "001e7056000006dd",
+      "_number": 1757,
+      "owner": {
+        "name": "John Doe"
+      },
+      "_more_changes": true
+    }
+  ]</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the <tt>n</tt> query parameter is supplied and additional changes exist
+that match the query beyond the end, the last change object has a
+<tt>_more_changes: true</tt> JSON field set. Callers can resume a query with
+the <tt>N</tt> query parameter, supplying the last change&#8217;s <tt>_sortkey</tt> field
+as the value. When going in the reverse direction with the <tt>P</tt> query
+parameter a <tt>_more_changes: true</tt> is put in the first change object if
+there are results <strong>before</strong> the first change returned.</p></div>
+<div class="paragraph"><p>Clients are allowed to specify more than one query by setting the <tt>q</tt>
+parameter multiple times. In this case the result is an array of
+arrays, one per query in the same order the queries were given in.</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Query for the 25 most recent open changes of the projects that you watch</div>
+<a id="/changes/?q=status:open+is:watched&n=25" onmousedown="javascript:
+  var i =  document.URL.lastIndexOf('/Documentation/');
+  var url = document.URL.substring(0, i) + '/changes/?q=status:open+is:watched&n=25';
+  document.getElementById('/changes/?q=status:open+is:watched&n=25').href = url;">
+    GET /changes/?q=status:open+is:watched&n=25 HTTP/1.0
+</a>
+</div></div>
+<div class="paragraph"><p>Query that retrieves changes for a user&#8217;s dashboard:</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/?q=is:open+owner:self&amp;q=is:open+reviewer:self+-owner:self&amp;q=is:closed+owner:self+limit:5&amp;o=LABELS HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    [
+      {
+        "kind": "gerritcodereview#change",
+        "id": "demo~master~Idaf5e098d70898b7119f6f4af5a6c13343d64b57",
+        "project": "demo",
+        "branch": "master",
+        "change_id": "Idaf5e098d70898b7119f6f4af5a6c13343d64b57",
+        "subject": "One change",
+        "status": "NEW",
+        "created": "2012-07-17 07:18:30.854000000",
+        "updated": "2012-07-17 07:19:27.766000000",
+        "reviewed": true,
+        "mergeable": true,
+        "_sortkey": "001e7057000006dc",
+        "_number": 1756,
+        "owner": {
+          "name": "John Doe"
+        },
+        "labels": {
+          "Verified": {},
+          "Code-Review": {}
+        }
+      }
+    ],
+    [],
+    []
+  ]</tt></pre>
+</div></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Query the changes for your user dashboard</div>
+<a id="/changes/?q=is:open+owner:self&q=is:open+reviewer:self+-owner:self&q=is:closed+owner:self+limit:5&o=LABELS" onmousedown="javascript:
+  var i =  document.URL.lastIndexOf('/Documentation/');
+  var url = document.URL.substring(0, i) + '/changes/?q=is:open+owner:self&q=is:open+reviewer:self+-owner:self&q=is:closed+owner:self+limit:5&o=LABELS';
+  document.getElementById('/changes/?q=is:open+owner:self&q=is:open+reviewer:self+-owner:self&q=is:closed+owner:self+limit:5&o=LABELS').href = url;">
+    GET /changes/?q=is:open+owner:self&q=is:open+reviewer:self+-owner:self&q=is:closed+owner:self+limit:5&o=LABELS HTTP/1.0
+</a>
+</div></div>
+<div class="paragraph"><p>Additional fields can be obtained by adding <tt>o</tt> parameters, each
+option requires more database lookups and slows down the query
+response time to the client so they are generally disabled by
+default. Optional fields are:</p></div>
+<div class="openblock" id="labels">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>LABELS</tt>: a summary of each label required for submit, and
+  approvers that have granted (or rejected) with that label.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="detailed-labels">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>DETAILED_LABELS</tt>: detailed label information, including numeric
+  values of all existing approvals, recognized label values, values
+  permitted to be set by the current user, and reviewers that may be
+  removed by the current user.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="current-revision">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>CURRENT_REVISION</tt>: describe the current revision (patch set)
+  of the change, including the commit SHA-1 and URLs to fetch from.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="all-revisions">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>ALL_REVISIONS</tt>: describe all revisions, not just current.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="current-commit">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>CURRENT_COMMIT</tt>: parse and output all header fields from the
+  commit object, including message. Only valid when the current
+  revision or all revisions are selected.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="all-commits">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>ALL_COMMITS</tt>: parse and output all header fields from the
+  output revisions. If only <tt>CURRENT_REVISION</tt> was requested
+  then only the current revision&#8217;s commit data will be output.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="current-files">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>CURRENT_FILES</tt>: list files modified by the commit, including
+  basic line counts inserted/deleted per file. Only valid when
+  the current revision or all revisions are selected.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="all-files">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>ALL_FILES</tt>: list files modified by the commit, including
+  basic line counts inserted/deleted per file. If only the
+  <tt>CURRENT_REVISION</tt> was requested the only that commit&#8217;s
+  modified files will be output.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="openblock" id="detailed-accounts">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>DETAILED_ACCOUNTS</tt>: include <tt>_account_id</tt> and <tt>email</tt> fields when
+  referencing accounts.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/?q=97&amp;o=CURRENT_REVISION&amp;o=CURRENT_COMMIT&amp;o=CURRENT_FILES HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    {
+      "kind": "gerritcodereview#change",
+      "id": "demo~master~I7ea46d2e2ee5c64c0d807677859cfb7d90b8966a",
+      "project": "gerrit",
+      "branch": "master",
+      "change_id": "I7ea46d2e2ee5c64c0d807677859cfb7d90b8966a",
+      "subject": "Use an EventBus to manage star icons",
+      "status": "NEW",
+      "created": "2012-04-25 00:52:25.580000000",
+      "updated": "2012-04-25 00:52:25.586000000",
+      "mergeable": true,
+      "_sortkey": "001c9bf400000061",
+      "_number": 97,
+      "owner": {
+        "name": "Shawn Pearce"
+      },
+      "current_revision": "184ebe53805e102605d11f6b143486d15c23a09c",
+      "revisions": {
+        "184ebe53805e102605d11f6b143486d15c23a09c": {
+          "_number": 1,
+          "fetch": {
+            "git": {
+              "url": "git://localhost/gerrit",
+              "ref": "refs/changes/97/97/1"
+            },
+            "http": {
+              "url": "http://127.0.0.1:8080/gerrit",
+              "ref": "refs/changes/97/97/1"
+            }
+          },
+          "commit": {
+            "parents": [
+              {
+                "commit": "1eee2c9d8f352483781e772f35dc586a69ff5646",
+                "subject": "Migrate contributor agreements to All-Projects."
+              }
+            ],
+            "author": {
+              "name": "Shawn O. Pearce",
+              "email": "sop@google.com",
+              "date": "2012-04-24 18:08:08.000000000",
+              "tz": -420
+            },
+            "committer": {
+              "name": "Shawn O. Pearce",
+              "email": "sop@google.com",
+              "date": "2012-04-24 18:08:08.000000000",
+              "tz": -420
+            },
+            "subject": "Use an EventBus to manage star icons",
+            "message": "Use an EventBus to manage star icons\n\nImage widgets that need to ..."
+          },
+          "files": {
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/ChangeCache.java": {
+              "lines_deleted": 8
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/ChangeDetailCache.java": {
+              "lines_inserted": 1
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/ChangeScreen.java": {
+              "lines_inserted": 11,
+              "lines_deleted": 19
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/ChangeTable.java": {
+              "lines_inserted": 23,
+              "lines_deleted": 20
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/StarCache.java": {
+              "status": "D",
+              "lines_deleted": 139
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/changes/StarredChanges.java": {
+              "status": "A",
+              "lines_inserted": 204
+            },
+            "gerrit-gwtui/src/main/java/com/google/gerrit/client/ui/Screen.java": {
+              "lines_deleted": 9
+            }
+          }
+        }
+      }
+    }
+  ]</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-change">Get Change</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a change.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940 HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "NEW",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "name": "John Doe"
+    }
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-change-detail">Get Change Detail</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/detail</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a change with <a href="#labels">labels</a>, <a href="#detailed-labels">
+detailed labels</a> and <a href="#detailed-accounts">detailed accounts</a>.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/detail HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "NEW",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "_account_id": 1000096,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    },
+    "labels": {
+      "Verified": {
+        "all": [
+          {
+            "value": 0,
+            "_account_id": 1000096,
+            "name": "John Doe",
+            "email": "john.doe@example.com"
+          },
+          {
+            "value": 0,
+            "_account_id": 1000097,
+            "name": "Jane Roe",
+            "email": "jane.roe@example.com"
+          }
+        ],
+        "values": {
+          "-1": "Fails",
+          " 0": "No score",
+          "+1": "Verified"
+        }
+      },
+      "Code-Review": {
+        "recommended": {
+          "_account_id": 1000097,
+          "name": "Jane Roe",
+          "email": "jane.roe@example.com"
+        },
+        "disliked": {
+          "_account_id": 1000096,
+          "name": "John Doe",
+          "email": "john.doe@example.com"
+        },
+        "all": [
+          {
+            "value": -1,
+            "_account_id": 1000096,
+            "name": "John Doe",
+            "email": "john.doe@example.com"
+          },
+          {
+            "value": 1,
+            "_account_id": 1000097,
+            "name": "Jane Roe",
+            "email": "jane.roe@example.com"
+          }
+        ]
+        "values": {
+          "-2": "Do not submit",
+          "-1": "I would prefer that you didn\u0027t submit this",
+          " 0": "No score",
+          "+1": "Looks good to me, but someone else must approve",
+          "+2": "Looks good to me, approved"
+        }
+      }
+    },
+    "permitted_labels": {
+      "Verified": [
+        "-1",
+        " 0",
+        "+1"
+      ],
+      "Code-Review": [
+        "-2",
+        "-1",
+        " 0",
+        "+1",
+        "+2"
+      ]
+    },
+    "removable_reviewers": [
+      {
+        "_account_id": 1000096,
+        "name": "John Doe",
+        "email": "john.doe@example.com"
+      },
+      {
+        "_account_id": 1000097,
+        "name": "Jane Roe",
+        "email": "jane.roe@example.com"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-topic">Get Topic</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/topic</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves the topic of a change.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/topic HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "Documentation"</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the change does not have a topic an empty string is returned.</p></div>
+</div>
+<div class="sect2">
+<h3 id="set-topic">Set Topic</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /changes/<a href="#change-id">{change-id}</a>/topic</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Sets the topic of a change.</p></div>
+<div class="paragraph"><p>The new topic must be provided in the request body inside a
+<a href="#topic-input">TopicInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/topic HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "topic": "Documentation"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the new topic is returned.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "Documentation"</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the topic was deleted the response is "<tt>204 No Content</tt>".</p></div>
+</div>
+<div class="sect2">
+<h3 id="delete-topic">Delete Topic</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /changes/<a href="#change-id">{change-id}</a>/topic</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes the topic of a change.</p></div>
+<div class="paragraph"><p>The request body does not need to include a <a href="#topic-input">
+TopicInput</a> entity if no review comment is added.</p></div>
+<div class="paragraph"><p>Please note that some proxies prohibit request bodies for DELETE
+requests. In this case, if you want to specify a commit message, use
+<a href="#set-topic">PUT</a> to delete the topic.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/topic HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="abandon-change">Abandon Change</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/abandon</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Abandons a change.</p></div>
+<div class="paragraph"><p>The request body does not need to include a <a href="#abandon-input">
+AbandonInput</a> entity if no review comment is added.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/abandon HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the abandoned change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "ABANDONED",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "name": "John Doe"
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the change cannot be abandoned because the change state doesn&#8217;t
+allow abandoning of the change, the response is "<tt>409 Conflict</tt>" and
+the error message is contained in the response body.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 409 Conflict
+  Content-Disposition: attachment
+  Content-Type: text/plain;charset=UTF-8
+
+  change is merged</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="restore-change">Restore Change</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/restore</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Restores a change.</p></div>
+<div class="paragraph"><p>The request body does not need to include a <a href="#restore-input">
+RestoreInput</a> entity if no review comment is added.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/restore HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the restored change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "NEW",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "name": "John Doe"
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the change cannot be restored because the change state doesn&#8217;t
+allow restoring the change, the response is "<tt>409 Conflict</tt>" and
+the error message is contained in the response body.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 409 Conflict
+  Content-Disposition: attachment
+  Content-Type: text/plain;charset=UTF-8
+
+  change is new</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="revert-change">Revert Change</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/revert</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Reverts a change.</p></div>
+<div class="paragraph"><p>The request body does not need to include a <a href="#revert-input">
+RevertInput</a> entity if no review comment is added.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revert HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the reverting change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Revert \"Implementing Feature X\"",
+    "status": "NEW",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "name": "John Doe"
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the change cannot be reverted because the change state doesn&#8217;t
+allow reverting the change, the response is "<tt>409 Conflict</tt>" and
+the error message is contained in the response body.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 409 Conflict
+  Content-Disposition: attachment
+  Content-Type: text/plain;charset=UTF-8
+
+  change is new</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="submit-change">Submit Change</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/submit</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Submits a change.</p></div>
+<div class="paragraph"><p>The request body only needs to include a <a href="#submit-input">
+SubmitInput</a> entity if the request should wait for the merge to
+complete.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/submit HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "wait_for_merge": true
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity is returned that
+describes the submitted/merged change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "MERGED",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "name": "John Doe"
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the change cannot be submitted because the submit rule doesn&#8217;t allow
+submitting the change, the response is "<tt>409 Conflict</tt>" and the error
+message is contained in the response body.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 409 Conflict
+  Content-Disposition: attachment
+  Content-Type: text/plain;charset=UTF-8
+
+  blocked by Verified</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reviewer-endpoints">Reviewer Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="list-reviewers">List Reviewers</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/reviewers/</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Lists the reviewers of a change.</p></div>
+<div class="paragraph"><p>As result a list of <a href="#reviewer-info">ReviewerInfo</a> entries is returned.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers/ HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    {
+      "kind": "gerritcodereview#reviewer",
+      "approvals": {
+        "Verified": "+1",
+        "Code-Review": "+2"
+      },
+      "_account_id": 1000096,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    },
+    {
+      "kind": "gerritcodereview#reviewer",
+      "approvals": {
+        "Verified": " 0",
+        "Code-Review": "-1"
+      },
+      "_account_id": 1000097,
+      "name": "Jane Roe",
+      "email": "jane.roe@example.com"
+    }
+  ]</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-reviewer">Get Reviewer</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/reviewers/<a href="rest-api-accounts.html#account-id">{account-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a reviewer of a change.</p></div>
+<div class="paragraph"><p>As response a <a href="#reviewer-info">ReviewerInfo</a> entity is returned that
+describes the reviewer.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers/john.doe@example.com HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#reviewer",
+    "approvals": {
+      "Verified": "+1",
+      "Code-Review": "+2"
+    },
+    "_account_id": 1000096,
+    "name": "John Doe",
+    "email": "john.doe@example.com"
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="add-reviewer">Add Reviewer</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/reviewers</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Adds one user or all members of one group as reviewer to the change.</p></div>
+<div class="paragraph"><p>The reviewer to be added to the change must be provided in the request
+body as a <a href="#reviewer-input">ReviewerInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "reviewer": "john.doe@example.com"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response an <a href="#add-reviewer-result">AddReviewerResult</a> entity is
+returned that describes the newly added reviewers.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "reviewers": [
+      {
+        "kind": "gerritcodereview#reviewer",
+        "approvals": {
+          "Verified": " 0",
+          "Code-Review": " 0"
+        },
+        "_account_id": 1000096,
+        "name": "John Doe",
+        "email": "john.doe@example.com"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If a group is specified, adding the group members as reviewers is an
+atomic operation. This means if an error is returned, none of the
+members are added as reviewer.</p></div>
+<div class="paragraph"><p>If a group with many members is added as reviewer a confirmation may be
+required.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "reviewer": "MyProjectVerifiers"
+  }</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "error": "The group My Group has 15 members. Do you want to add them all as reviewers?",
+    "confirm": true
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>To confirm the addition of the reviewers, resend the request with the
+<tt>confirmed</tt> flag being set.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "reviewer": "MyProjectVerifiers",
+    "confirmed": true
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="delete-reviewer">Delete Reviewer</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /changes/<a href="#change-id">{change-id}</a>/reviewers/<a href="rest-api-accounts.html#account-id">{account-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes a reviewer from a change.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/reviewers/John%20Doe HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="revision-endpoints">Revision Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="get-review">Get Review</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/review</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a review of a revision.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/review HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#change-info">ChangeInfo</a> entity with
+<a href="#detailed-labels">detailed labels</a> and <a href="#detailed-accounts">
+detailed accounts</a> is returned that describes the review of the
+revision. The revision for which the review is retrieved is contained
+in the <tt>revisions</tt> field. In addition the <tt>current_revision</tt> field is
+set if the revision for which the review is retrieved is the current
+revision of the change. Please note that the returned labels are always
+for the current patch set.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#change",
+    "id": "myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "project": "myProject",
+    "branch": "master",
+    "change_id": "I8473b95934b5732ac55d26311a706c9c2bde9940",
+    "subject": "Implementing Feature X",
+    "status": "NEW",
+    "created": "2013-02-01 09:59:32.126000000",
+    "updated": "2013-02-21 11:16:36.775000000",
+    "reviewed": true,
+    "mergeable": true,
+    "_sortkey": "0023412400000f7d",
+    "_number": 3965,
+    "owner": {
+      "_account_id": 1000096,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    },
+    "labels": {
+      "Verified": {
+        "all": [
+          {
+            "value": 0,
+            "_account_id": 1000096,
+            "name": "John Doe",
+            "email": "john.doe@example.com"
+          },
+          {
+            "value": 0,
+            "_account_id": 1000097,
+            "name": "Jane Roe",
+            "email": "jane.roe@example.com"
+          }
+        ],
+        "values": {
+          "-1": "Fails",
+          " 0": "No score",
+          "+1": "Verified"
+        }
+      },
+      "Code-Review": {
+        "all": [
+          {
+            "value": -1,
+            "_account_id": 1000096,
+            "name": "John Doe",
+            "email": "john.doe@example.com"
+          },
+          {
+            "value": 1,
+            "_account_id": 1000097,
+            "name": "Jane Roe",
+            "email": "jane.roe@example.com"
+          }
+        ]
+        "values": {
+          "-2": "Do not submit",
+          "-1": "I would prefer that you didn\u0027t submit this",
+          " 0": "No score",
+          "+1": "Looks good to me, but someone else must approve",
+          "+2": "Looks good to me, approved"
+        }
+      }
+    },
+    "permitted_labels": {
+      "Verified": [
+        "-1",
+        " 0",
+        "+1"
+      ],
+      "Code-Review": [
+        "-2",
+        "-1",
+        " 0",
+        "+1",
+        "+2"
+      ]
+    },
+    "removable_reviewers": [
+      {
+        "_account_id": 1000096,
+        "name": "John Doe",
+        "email": "john.doe@example.com"
+      },
+      {
+        "_account_id": 1000097,
+        "name": "Jane Roe",
+        "email": "jane.roe@example.com"
+      }
+    ],
+    "current_revision": "674ac754f91e64a0efb8087e59a176484bd534d1",
+    "revisions": {
+      "674ac754f91e64a0efb8087e59a176484bd534d1": {
+      "_number": 2,
+      "fetch": {
+        "http": {
+          "url": "http://gerrit/myProject",
+          "ref": "refs/changes/65/3965/2"
+        }
+      }
+    }
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="set-review">Set Review</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/review</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Sets a review on a revision.</p></div>
+<div class="paragraph"><p>The review must be provided in the request body as a
+<a href="#review-input">ReviewInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/review HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "message": "Some nits need to be fixed.",
+    "labels": {
+      "Code-Review": -1
+    },
+    "comments": {
+      "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java": [
+        {
+          "line": 23,
+          "message": "[nit] trailing whitespace"
+        },
+        {
+          "line": 49,
+          "message": "[nit] s/conrtol/control"
+        }
+      ]
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#review-info">ReviewInfo</a> entity is returned that
+describes the applied labels.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "labels": {
+      "Code-Review": -1
+    }
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="submit-revision">Submit Revision</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/submit</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Submits a revision.</p></div>
+<div class="paragraph"><p>The request body only needs to include a <a href="#submit-input">
+SubmitInput</a> entity if the request should wait for the merge to
+complete.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/submit HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "wait_for_merge": true
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#submit-info">SubmitInfo</a> entity is returned that
+describes the status of the submitted change.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "status": "MERGED"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the revision cannot be submitted, e.g. because the submit rule
+doesn&#8217;t allow submitting the revision or the revision is not the
+current revision, the response is "<tt>409 Conflict</tt>" and the error
+message is contained in the response body.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 409 Conflict
+  Content-Type: text/plain;charset=UTF-8
+
+  "revision 674ac754f91e64a0efb8087e59a176484bd534d1 is not current revision"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-submit-type">Get Submit Type</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/submit_type</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Gets the method the server will use to submit (merge) the change.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/current/submit_type HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "MERGE_IF_NECESSARY"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="test-submit-type">Test Submit Type</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/test.submit_type</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Tests the submit_type Prolog rule in the project, or the one given.</p></div>
+<div class="paragraph"><p>Request body may be either the Prolog code as <tt>text/plain</tt> or a
+<a href="#rule-input">RuleInput</a> object. The query parameter <tt>filters</tt>
+may be set to <tt>SKIP</tt> to bypass parent project filters while testing
+a project-specific rule.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/current/test.submit_type HTTP/1.0
+  Content-Type: text/plain;charset-UTF-8
+
+  submit_type(cherry_pick).</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "cherry_pick"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="test-submit-rule">Test Submit Rule</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/test.submit_rule</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Tests the submit_rule Prolog rule in the project, or the one given.</p></div>
+<div class="paragraph"><p>Request body may be either the Prolog code as <tt>text/plain</tt> or a
+<a href="#rule-input">RuleInput</a> object. The query parameter <tt>filters</tt>
+may be set to <tt>SKIP</tt> to bypass parent project filters while testing
+a project-specific rule.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/current/test.submit_type?filters=SKIP HTTP/1.0
+  Content-Type: text/plain;charset-UTF-8
+
+  submit_rule(submit(R)) :-
+    R = label('Any-Label-Name', reject(_)).</tt></pre>
+</div></div>
+<div class="paragraph"><p>The response is a list of <a href="#submit-record">SubmitRecord</a> entries
+describing the permutations that satisfy the tested submit rule.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    {
+      "status": "NOT_READY",
+      "reject": {
+        "Any-Label-Name": {}
+      }
+    }
+  ]</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="list-drafts">List Drafts</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/drafts/</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Lists the draft comments of a revision that belong to the calling
+user.</p></div>
+<div class="paragraph"><p>As result a map is returned that maps the file path to a list of
+<a href="#comment-info">CommentInfo</a> entries. The entries in the map are
+sorted by file path.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/drafts/ HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java": [
+      {
+        "kind": "gerritcodereview#comment",
+        "id": "TvcXrmjM",
+        "line": 23,
+        "message": "[nit] trailing whitespace",
+        "updated": "2013-02-26 15:40:43.986000000"
+      },
+      {
+        "kind": "gerritcodereview#comment",
+        "id": "TveXwFiA",
+        "line": 49,
+        "in_reply_to": "TfYX-Iuo",
+        "message": "Done",
+        "updated": "2013-02-26 15:40:45.328000000"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="create-draft">Create Draft</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/drafts</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Creates a draft comment on a revision.</p></div>
+<div class="paragraph"><p>The new draft comment must be provided in the request body inside a
+<a href="#comment-input">CommentInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/drafts HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "path": "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java",
+    "line": 23,
+    "message": "[nit] trailing whitespace"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#comment-info">CommentInfo</a> entity is returned that
+describes the draft comment.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#comment",
+    "id": "TvcXrmjM",
+    "path": "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java",
+    "line": 23,
+    "message": "[nit] trailing whitespace",
+    "updated": "2013-02-26 15:40:43.986000000"
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-draft">Get Draft</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/drafts/<a href="#draft-id">{draft-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a draft comment of a revision that belongs to the calling
+user.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/drafts/TvcXrmjM HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#comment-info">CommentInfo</a> entity is returned that
+describes the draft comment.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#comment",
+    "id": "TvcXrmjM",
+    "path": "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java",
+    "line": 23,
+    "message": "[nit] trailing whitespace",
+    "updated": "2013-02-26 15:40:43.986000000"
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="update-draft">Update Draft</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/drafts/<a href="#draft-id">{draft-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Updates a draft comment on a revision.</p></div>
+<div class="paragraph"><p>The new draft comment must be provided in the request body inside a
+<a href="#comment-input">CommentInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/drafts/TvcXrmjM HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "path": "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java",
+    "line": 23,
+    "message": "[nit] trailing whitespace"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#comment-info">CommentInfo</a> entity is returned that
+describes the draft comment.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#comment",
+    "id": "TvcXrmjM",
+    "path": "gerrit-server/src/main/java/com/google/gerrit/server/project/RefControl.java",
+    "line": 23,
+    "message": "[nit] trailing whitespace",
+    "updated": "2013-02-26 15:40:43.986000000"
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="delete-draft">Delete Draft</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/drafts/<a href="#draft-id">{draft-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes a draft comment from a revision.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/drafts/TvcXrmjM HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="set-reviewed">Set Reviewed</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/files/<a href="#patch-id">{patch-id}</a>/reviewed</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Marks a patch of a revision as reviewed by the calling user.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/files/gerrit-server%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgoogle%2Fgerrit%2Fserver%2Fproject%2FRefControl.java/reviewed HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 201 Created</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the patch was already marked as reviewed by the calling user the
+response is "<tt>200 OK</tt>".</p></div>
+</div>
+<div class="sect2">
+<h3 id="delete-reviewed">Delete Reviewed</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /changes/<a href="#change-id">{change-id}</a>/revisions/<a href="#revision-id">{revision-id}</a>/files/<a href="#patch-id">{patch-id}</a>/reviewed</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes the reviewed flag of the calling user from a patch of a revision.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/674ac754f91e64a0efb8087e59a176484bd534d1/files/gerrit-server%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgoogle%2Fgerrit%2Fserver%2Fproject%2FRefControl.java/reviewed HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ids">IDs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="account-id"><a href="rest-api-accounts.html#account-id">{account-id}</a></h3>
+<div class="openblock">
+<div class="content">
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="change-id">{change-id}</h3>
+<div class="paragraph"><p>Identifier that uniquely identifies one change.</p></div>
+<div class="paragraph"><p>This can be:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+an ID of the change in the format "<em>&lt;project&gt;~&lt;branch&gt;~&lt;Change-Id&gt;</em>",
+  where for the branch the <tt>refs/heads/</tt> prefix can be omitted
+  ("myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940")
+</p>
+</li>
+<li>
+<p>
+a Change-Id if it uniquely identifies one change
+  ("I8473b95934b5732ac55d26311a706c9c2bde9940")
+</p>
+</li>
+<li>
+<p>
+a legacy numeric change ID ("4247")
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="draft-id">{draft-id}</h3>
+<div class="paragraph"><p>UUID of a draft comment.</p></div>
+</div>
+<div class="sect2">
+<h3 id="patch-id">{patch-id}</h3>
+<div class="paragraph"><p>The file path of the patch.</p></div>
+</div>
+<div class="sect2">
+<h3 id="revision-id">{revision-id}</h3>
+<div class="paragraph"><p>Identifier that uniquely identifies one revision of a change.</p></div>
+<div class="paragraph"><p>This can be:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+the literal <tt>current</tt> to name the current patch set/revision
+</p>
+</li>
+<li>
+<p>
+a commit ID ("674ac754f91e64a0efb8087e59a176484bd534d1")
+</p>
+</li>
+<li>
+<p>
+an abbreviated commit ID that uniquely identifies one revision of the
+  change ("674ac754"), at least 4 digits are required
+</p>
+</li>
+<li>
+<p>
+a legacy numeric patch number ("1" for first patch set of the change)
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="json-entities">JSON Entities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="abandon-input">AbandonInput</h3>
+<div class="paragraph"><p>The <tt>AbandonInput</tt> entity contains information for abandoning a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message to be added as review comment to the change when abandoning the
+change.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="add-reviewer-result">AddReviewerResult</h3>
+<div class="paragraph"><p>The <tt>AddReviewerResult</tt> entity describes the result of adding a
+reviewer to a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>reviewers</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The newly added reviewers as a list of <a href="#reviewer-info">
+ReviewerInfo</a> entities.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>error</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Error message explaining why the reviewer could not be added.<br />
+If a group was specified in the input and an error is returned, it
+means that none of the members were added as reviewer.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>confirm</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>false</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether adding the reviewer requires confirmation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="approval-info">ApprovalInfo</h3>
+<div class="paragraph"><p>The <tt>ApprovalInfo</tt> entity contains information about an approval from a
+user for a label on a change.</p></div>
+<div class="paragraph"><p><tt>ApprovalInfo</tt> has the same fields as
+<a href="rest-api-accounts.html#account-info">AccountInfo</a>.
+In addition <tt>ApprovalInfo</tt> has the following fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>value</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The vote that the user has given for the label. If present and zero, the
+user is permitted to vote on the label. If absent, the user is not
+permitted to vote on that label.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="change-info">ChangeInfo</h3>
+<div class="paragraph"><p>The <tt>ChangeInfo</tt> entity contains information about a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name           </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table"><tt>gerritcodereview#change</tt></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The ID of the change in the format "<em>&lt;project&gt;~&lt;branch&gt;~&lt;Change-Id&gt;</em>",
+where <em>project</em>, <em>branch</em> and <em>Change-Id</em> are URL encoded. For <em>branch</em> the
+<tt>refs/heads/</tt> prefix is omitted.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>project</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>branch</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the target branch.<br />
+The <tt>refs/heads/</tt> prefix is omitted.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>topic</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The topic to which this change belongs.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>change_id</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The Change-Id of the change.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>subject</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The subject of the change (header line of the commit message).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>status</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The status of the change (<tt>NEW</tt>, <tt>SUBMITTED</tt>, <tt>MERGED</tt>, <tt>ABANDONED</tt>,
+<tt>DRAFT</tt>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>created</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api.html#timestamp">timestamp</a> of when the change was
+created.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>updated</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api.html#timestamp">timestamp</a> of when the change was last
+updated.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>starred</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the calling user has starred this change.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>reviewed</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the change was reviewed by the calling user.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>mergeable</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Whether the change is mergeable.<br />
+Not set for merged changes.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>_sortkey</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The sortkey of the change.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>_number</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The legacy numeric ID of the change.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>owner</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The owner of the change as an <a href="rest-api-accounts.html#account-info">
+AccountInfo</a> entity.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>labels</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The labels of the change as a map that maps the label names to
+<a href="#label-info">LabelInfo</a> entries.<br />
+Only set if <a href="#labels">labels</a> or <a href="#detailed-labels">detailed
+labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>permitted_labels</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">A map of the permitted labels that maps a label name to the list of
+values that are allowed for that label.<br />
+Only set if <a href="#detailed-labels">detailed labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>removable_reviewers</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The reviewers that can be removed by the calling user as a list of
+<a href="rest-api-accounts.html#account-info">AccountInfo</a> entities.<br />
+Only set if <a href="#detailed-labels">detailed labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>current_revision</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The commit ID of the current patch set of this change.<br />
+Only set if <a href="#current-revision">the current revision</a> is requested
+or if <a href="#all-revisions">all revisions</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>revisions</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">All patch sets of this change as a map that maps the commit ID of the
+patch set to a <a href="#revision-info">RevisionInfo</a> entity.<br />
+Only set if <a href="#all-revisions">all revisions</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>_more_changes</tt></p></td>
+<td align="center" valign="top"><p class="table">optional, not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the query would deliver more results if not limited.<br />
+Only set on either the last or the first change that is returned.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="comment-info">CommentInfo</h3>
+<div class="paragraph"><p>The <tt>CommentInfo</tt> entity contains information about an inline comment.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table"><tt>gerritcodereview#comment</tt></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The URL encoded UUID of the draft comment.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>path</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The path of the file for which the inline comment was done.<br />
+Not set if returned in a map where the key is the file path.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>side</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The side on which the comment was added.<br />
+Allowed values are <tt>REVISION</tt> and <tt>PARENT</tt>.<br />
+If not set, the default is <tt>REVISION</tt>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>line</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The number of the line for which the comment was done.<br />
+If not set, it&#8217;s a file comment.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>in_reply_to</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The URL encoded UUID of the comment to which this comment is a reply.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The comment message.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>updated</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api.html#timestamp">timestamp</a> of when this comment was
+written.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="comment-input">CommentInput</h3>
+<div class="paragraph"><p>The <tt>CommitInput</tt> entity contains information for creating an inline
+comment.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Must be <tt>gerritcodereview#comment</tt> if provided.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The URL encoded UUID of the comment if an existing draft comment should
+be updated.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>path</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The path of the file for which the inline comment should be added.<br />
+Doesn&#8217;t need to be set if contained in a map where the key is the file
+path.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>side</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The side on which the comment should be added.<br />
+Allowed values are <tt>REVISION</tt> and <tt>PARENT</tt>.<br />
+If not set, the default is <tt>REVISION</tt>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>line</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The number of the line for which the comment should be added.<br />
+<tt>0</tt> if it is a file comment.<br />
+If not set, a file comment is added.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>in_reply_to</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The URL encoded UUID of the comment to which this comment is a reply.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>updated</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api.html#timestamp">timestamp</a> of this comment.<br />
+Accepted but ignored.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The comment message.<br />
+If not set and an existing draft comment is updated, the existing draft
+comment is deleted.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="commit-info">CommitInfo</h3>
+<div class="paragraph"><p>The <tt>CommitInfo</tt> entity contains information about a commit.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>commit</tt></p></td>
+<td align="left" valign="top"><p class="table">The commit ID.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>parent</tt></p></td>
+<td align="left" valign="top"><p class="table">The parent commits of this commit as a list of
+<a href="#commit-info">CommitInfo</a> entities.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>author</tt></p></td>
+<td align="left" valign="top"><p class="table">The author of the commit as a
+<a href="#git-person-info">GitPersonInfo</a> entity.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>committer</tt></p></td>
+<td align="left" valign="top"><p class="table">The committer of the commit as a
+<a href="#git-person-info">GitPersonInfo</a> entity.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>subject</tt></p></td>
+<td align="left" valign="top"><p class="table">The subject of the commit (header line of the commit message).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="left" valign="top"><p class="table">The commit message.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fetch-info">FetchInfo</h3>
+<div class="paragraph"><p>The <tt>FetchInfo</tt> entity contains information about how to fetch a patch
+set via a certain protocol.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>url</tt></p></td>
+<td align="left" valign="top"><p class="table">The URL of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>ref</tt></p></td>
+<td align="left" valign="top"><p class="table">The ref of the patch set.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="file-info">FileInfo</h3>
+<div class="paragraph"><p>The <tt>FileInfo</tt> entity contains information about a file in a patch set.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>status</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The status of the file ("<tt>A</tt>"=Added, "<tt>D</tt>"=Deleted, "<tt>R</tt>"=Renamed,
+"<tt>C</tt>"=Copied, "<tt>W</tt>"=Rewritten).<br />
+Not set if the file was Modified ("<tt>M</tt>").</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>binary</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the file is binary.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>old_path</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The old file path.<br />
+Only set if the file was renamed or copied.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>lines_inserted</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Number of inserted lines.<br />
+Not set for binary files or if no lines were inserted.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>lines_deleted</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Number of deleted lines.<br />
+Not set for binary files or if no lines were deleted.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="git-person-info">GitPersonInfo</h3>
+<div class="paragraph"><p>The <tt>GitPersonInfo</tt> entity contains information about the
+author/committer of a commit.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>name</tt></p></td>
+<td align="left" valign="top"><p class="table">The name of the author/committer.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>email</tt></p></td>
+<td align="left" valign="top"><p class="table">The email address of the author/committer.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>date</tt></p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api.html#timestamp">timestamp</a> of when
+this identity was constructed.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>tz</tt></p></td>
+<td align="left" valign="top"><p class="table">The timezone offset from UTC of when this identity was
+constructed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="label-info">LabelInfo</h3>
+<div class="paragraph"><p>The <tt>LabelInfo</tt> entity contains information about a label on a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>approved</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The user who approved this label on the change
+as a <a href="rest-api-accounts.html#account-info">AccountInfo</a> entity.<br />
+Only set if <a href="#labels">labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>rejected</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The user who rejected this label on the change
+as a <a href="rest-api-accounts.html#account-info">AccountInfo</a> entity.<br />
+Only set if <a href="#labels">labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>recommended</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The user who recommended this label on the
+change as a <a href="rest-api-accounts.html#account-info">AccountInfo</a> entity.<br />
+Only set if <a href="#labels">labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>disliked</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The user who disliked this label on the change
+as a <a href="rest-api-accounts.html#account-info">AccountInfo</a> entity.<br />
+Only set if <a href="#labels">labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>value</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The voting value of the user who
+recommended/disliked this label on the change if it is not
+"<tt>+1</tt>"/"<tt>-1</tt>".<br />
+Only set if <a href="#labels">labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>optional</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the label is optional. Optional means the label may be set, but
+it&#8217;s neither necessary for submission nor does it block submission if
+set.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>all</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">List of all approvals for this label as a list
+of <a href="#approval-info">ApprovalInfo</a> entities.<br />
+Only set if <a href="#detailed-labels">detailed labels</a> are requested.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>values</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">A map of all values that are allowed for this
+label. The map maps the values ("<tt>-2</tt>", "<tt>-1</tt>", " <tt>0</tt>", "<tt>+1</tt>", "<tt>+2</tt>")
+to the value descriptions.<br />
+Only set if <a href="#detailed-labels">detailed labels</a> are requested.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restore-input">RestoreInput</h3>
+<div class="paragraph"><p>The <tt>RestoreInput</tt> entity contains information for restoring a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message to be added as review comment to the change when restoring the
+change.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="revert-input">RevertInput</h3>
+<div class="paragraph"><p>The <tt>RevertInput</tt> entity contains information for reverting a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message to be added as review comment to the change when reverting the
+change.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="review-info">ReviewInfo</h3>
+<div class="paragraph"><p>The <tt>ReviewInfo</tt> entity contains information about a review.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name     </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>labels</tt></p></td>
+<td align="left" valign="top"><p class="table">The labels of the review as a map that maps the label names to the
+voting values.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="review-input">ReviewInput</h3>
+<div class="paragraph"><p>The <tt>ReviewInput</tt> entity contains information for adding a review to a
+revision.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name     </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The message to be added as review comment.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>labels</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The votes that should be added to the revision as a map that maps the
+label names to the voting values.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>comments</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The comments that should be added as a map that maps a file path to a
+list of <a href="#comment-input">CommentInput</a> entities.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>strict_labels</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>true</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether all labels are required to be within the user&#8217;s permitted ranges
+based on access controls.<br />
+If <tt>true</tt>, attempting to use a label not granted to the user will fail
+the entire modify operation early.<br />
+If <tt>false</tt>, the operation will execute anyway, but the proposed labels
+will be modified to be the "best" value allowed by the access controls.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>drafts</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Draft handling that defines how draft comments are handled that are
+already in the database but that were not also described in this
+input.<br />
+Allowed values are <tt>DELETE</tt>, <tt>PUBLISH</tt> and <tt>KEEP</tt>.<br />
+If not set, the default is <tt>DELETE</tt>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>notify</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Notify handling that defines to whom email notifications should be sent
+after the review is stored.<br />
+Allowed values are <tt>NONE</tt>, <tt>OWNER</tt>, <tt>OWNER_REVIEWERS</tt> and <tt>ALL</tt>.<br />
+If not set, the default is <tt>ALL</tt>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reviewer-info">ReviewerInfo</h3>
+<div class="paragraph"><p>The <tt>ReviewerInfo</tt> entity contains information about a reviewer and its
+votes on a change.</p></div>
+<div class="paragraph"><p><tt>ReviewerInfo</tt> has the same fields as
+<a href="rest-api-accounts.html#account-info">AccountInfo</a> and includes
+<a href="#detailed-accounts">detailed account information</a>.
+In addition <tt>ReviewerInfo</tt> has the following fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>gerritcodereview#reviewer</tt></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>approvals</tt></p></td>
+<td align="left" valign="top"><p class="table">The approvals of the reviewer as a map that maps the label names to the
+approval values ("<tt>-2</tt>", "<tt>-1</tt>", " <tt>0</tt>", "<tt>+1</tt>", "<tt>+2</tt>").</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reviewer-input">ReviewerInput</h3>
+<div class="paragraph"><p>The <tt>ReviewerInput</tt> entity contains information for adding a reviewer
+to a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>reviewer</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The <a href="rest-api-accounts.html#account-id">ID</a> of one account that
+should be added as reviewer or the <a href="rest-api-groups.html#group-id">
+ID</a> of one group for which all members should be added as reviewers.<br />
+If an ID identifies both an account and a group, only the account is
+added as reviewer to the change.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>confirmed</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Whether adding the reviewer is confirmed.<br />
+The Gerrit server may be configured to
+<a href="config-gerrit.html#addreviewer.maxWithoutConfirmation">require a
+confirmation</a> when adding a group as reviewer that has many members.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="revision-info">RevisionInfo</h3>
+<div class="paragraph"><p>The <tt>RevisionInfo</tt> entity contains information about a patch set.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>draft</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether the patch set is a draft.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>_number</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The patch set number.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>fetch</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">Information about how to fetch this patch set. The fetch information is
+provided as a map that maps the protocol name ("<tt>git</tt>", "<tt>http</tt>",
+"<tt>ssh</tt>") to <a href="#fetch-info">FetchInfo</a> entities.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>commit</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The commit of the patch set as
+<a href="#commit-info">CommitInfo</a> entity.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>files</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The files of the patch set as a map that maps the file names to
+<a href="#file-info">FileInfo</a> entities.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="rule-input">RuleInput</h3>
+<div class="paragraph"><p>The <tt>RuleInput</tt> entity contains information to test a Prolog rule.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>rule</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">Prolog code to execute instead of the code in <tt>refs/meta/config</tt>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>filters</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>RUN</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">When <tt>RUN</tt> filter rules in the parent projects are called to
+post-process the results of the project specific rule. This
+behavior matches how the rule will execute if installed.<br />
+If <tt>SKIP</tt> the parent filters are not called, allowing the test
+to return results from the input rule.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="submit-info">SubmitInfo</h3>
+<div class="paragraph"><p>The <tt>SubmitInfo</tt> entity contains information about the change status
+after submitting.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>status</tt></p></td>
+<td align="left" valign="top"><p class="table">The status of the change after submitting, can be <tt>MERGED</tt> or
+<tt>SUBMITTED</tt>.<br />
+If <tt>wait_for_merge</tt> in the <a href="#submit-input">SubmitInput</a> was set to
+<tt>false</tt> the returned status is <tt>SUBMITTED</tt> and the caller can&#8217;t know
+whether the change could be merged successfully.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="submit-input">SubmitInput</h3>
+<div class="paragraph"><p>The <tt>SubmitInput</tt> entity contains information for submitting a change.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>wait_for_merge</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>false</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether the request should wait for the merge to complete.<br />
+If <tt>false</tt> the request returns immediately after the change has been
+added to the merge queue and the caller can&#8217;t know whether the change
+could be merged successfully.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="submit-record">SubmitRecord</h3>
+<div class="paragraph"><p>The <tt>SubmitRecord</tt> entity describes results from a submit_rule.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>status</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table"><tt>OK</tt>, the change can be submitted.<br />
+<tt>NOT_READY</tt>, additional labels are required before submit.<br />
+<tt>CLOSED</tt>, closed changes cannot be submitted.<br />
+<tt>RULE_ERROR</tt>, rule code failed with an error.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>ok</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of labels that are approved; an
+<a href="rest-api-accounts.html#account-info">AccountInfo</a> identifies the
+voter chosen by the rule.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>reject</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of labels that are preventing submit;
+<a href="rest-api-accounts.html#account-info">AccountInfo</a> identifies voter.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>need</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of labels that need to be given to submit. The value is
+currently an empty object.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>may</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of labels that can be used, but do not affect submit.
+<a href="rest-api-accounts.html#account-info">AccountInfo</a> identifies voter,
+if the label has been applied.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>impossible</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of labels that should have been in <tt>need</tt> but cannot be
+used by any user because of access restrictions. The value
+is currently an empty object.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>error_message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">When status is RULE_ERROR this message provides some text describing
+the failure of the rule predicate.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="topic-input">TopicInput</h3>
+<div class="paragraph"><p>The <tt>TopicInput</tt> entity contains information for setting a topic.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="14%" />
+<col width="71%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>topic</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The topic.<br />
+The topic will be deleted if not set.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message to be added as review comment to the change when setting the
+topic.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2013-06-10 12:17:19 PDT
+</div>
+</div>
+</body>
+</html>

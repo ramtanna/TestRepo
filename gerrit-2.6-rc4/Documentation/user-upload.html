@@ -1,0 +1,1201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Gerrit Code Review - Uploading Changes</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Gerrit Code Review - Uploading Changes</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>Gerrit supports three methods of uploading changes:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Use <tt>repo upload</tt>, to create changes for review
+</p>
+</li>
+<li>
+<p>
+Use <tt>git push</tt>, to create changes for review
+</p>
+</li>
+<li>
+<p>
+Use <tt>git push</tt>, and bypass code review
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>All three methods rely on authentication, which must first be configured
+by the uploading user.</p></div>
+<div class="paragraph"><p>Gerrit supports two methods of authenticating the uploading user.  SSH
+public key, and HTTP/HTTPS.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="http">HTTP/HTTPS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>On Gerrit installations that do not support SSH authentication, the
+user must authenticate via HTTP/HTTPS.</p></div>
+<div class="paragraph"><p>When <a href="config-gerrit.html#auth.gitBasicAuth">gitBasicAuth</a> is enabled,
+the user is authenticated using standard BasicAuth and credentials validated
+using the same authentication method configured for the Gerrit Web UI.</p></div>
+<div class="paragraph"><p>When gitBasicAuth is not configured, the user&#8217;s HTTP credentials can be
+accessed within Gerrit by going to <tt>Settings</tt>, and then accessing the <tt>HTTP
+Password</tt> tab.</p></div>
+<div class="paragraph"><p>For Gerrit installations where an <a href="config-gerrit.html#auth.httpPasswordUrl">HTTP password URL</a>
+is configured, the password can be obtained by clicking on <tt>Obtain Password</tt>
+and then following the site-specific instructions.  On sites where this URL is
+not configured, the password can be obtained by clicking on <tt>Generate Password</tt>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ssh">SSH</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Each user uploading changes to Gerrit must configure one or more SSH
+public keys.  The per-user SSH key list can be accessed over the web
+within Gerrit by <tt>Settings</tt>, and then accessing the <tt>SSH Public Keys</tt>
+tab.</p></div>
+<div class="sect2">
+<h3 id="configure_ssh">Configuration</h3>
+<div class="paragraph"><p>To register a new SSH key for use with Gerrit, paste the contents of
+your <tt>id_rsa.pub</tt> or <tt>id_dsa.pub</tt> file into the text box and click
+the add button.  Gerrit only understands SSH version 2 public keys.
+Keys may be supplied in either the OpenSSH format (key starts with
+<tt>ssh-rsa</tt> or <tt>ssh-dss</tt>) or the RFC 4716 format (file starts with
+<tt>---- BEGIN SSH2 PUBLIC KEY ----</tt>).</p></div>
+<div class="paragraph"><p>Typically SSH keys are stored in your home directory, under <tt>~/.ssh</tt>.
+If you don&#8217;t have any keys yet, you can create a new one and protect
+it with a passphrase:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>ssh-keygen -t rsa</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Then copy the content of the public key file onto your clipboard,
+and paste it into Gerrit&#8217;s web interface:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>cat ~/.ssh/id_rsa.pub</tt></pre>
+</div></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">Users who frequently upload changes will also want to consider
+starting an <tt>ssh-agent</tt>, and adding their private key to the list
+managed by the agent, to reduce the frequency of entering the
+key&#8217;s passphrase.  Consult <tt>man ssh-agent</tt>, or your SSH client&#8217;s
+documentation, for more details on configuration of the agent
+process and how to add the private key.</td>
+</tr></table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="test_ssh">Testing Connections</h3>
+<div class="paragraph"><p>To verify your SSH key is working correctly, try using an SSH client
+to connect to Gerrit&#8217;s SSHD port.  By default Gerrit runs on
+port 29418, using the same hostname as the web server:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>  $ ssh -p 29418 sshusername@hostname
+
+    ****    Welcome to Gerrit Code Review    ****
+
+    Hi John Doe, you have successfully connected over SSH.
+
+    Unfortunately, interactive shells are disabled.
+    To clone a hosted Git repository, use:
+
+    git clone ssh://sshusername@hostname:29418/REPOSITORY_NAME.git
+
+  Connection to hostname closed.</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>In the command above, <tt>sshusername</tt> was configured as <tt>Username</tt> on
+the <tt>Profile</tt> tab of the <tt>Settings</tt> screen.  If it is not set,
+propose a name and use <tt>Select Username</tt> to select the name.</p></div>
+<div class="paragraph"><p>To determine the port number Gerrit is running on, visit the special
+information URL <tt>http://'hostname'/ssh_info</tt>, and copy the port
+number from the second field:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ curl http://hostname/ssh_info
+hostname 29418</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>If you are developing an automated tool to perform uploads to Gerrit,
+let the user supply the hostname or the web address for Gerrit,
+and obtain the port number on the fly from the <tt>/ssh_info</tt> URL.
+The returned output from this URL is always <tt>'hostname' SP 'port'</tt>,
+or <tt>NOT_AVAILABLE</tt> if the SSHD server is not currently running.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_git_push">git push</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="push_create">Create Changes</h3>
+<div class="paragraph"><p>To create new changes for review, simply push to the project&#8217;s
+magical <tt>refs/for/'branch'</tt> ref using any Git client tool:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push ssh://sshusername@hostname:29418/projectname HEAD:refs/for/branch</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>E.g. <tt>john.doe</tt> can use git push to upload new changes for the
+<tt>experimental</tt> branch of project <tt>kernel/common</tt>, hosted at the
+<tt>git.example.com</tt> Gerrit server:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push ssh://john.doe@git.example.com:29418/kernel/common HEAD:refs/for/experimental</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Each new commit uploaded by the <tt>git push</tt> client will be
+converted into a change record on the server.  The remote ref
+<tt>refs/for/experimental</tt> is not actually created by Gerrit, even
+though the client&#8217;s status messages may say otherwise.</p></div>
+<div class="paragraph"><p>Other users (e.g. project owners) who have configured Gerrit to
+notify them of new changes will be automatically sent an email
+message when the push is completed.</p></div>
+<div class="paragraph"><p>To include a short tag associated with all of the changes in the
+same group, such as the local topic branch name, append it after
+the destination branch name. In this example the short topic tag
+<em>driver/i42</em> will be saved on each change this push creates or
+updates:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push ssh://john.doe@git.example.com:29418/kernel/common HEAD:refs/for/experimental%topic=driver/i42</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>If you are frequently uploading changes to the same Gerrit server,
+consider adding an SSH host block in <tt>~/.ssh/config</tt> to remember
+your username, hostname and port number.  This permits the use of
+shorter URLs on the command line, such as:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ cat ~/.ssh/config
+...
+Host tr
+  Hostname git.example.com
+  Port 29418
+  User john.doe</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git push tr:kernel/common HEAD:refs/for/experimental</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Specific reviewers can be requested and/or additional <em>carbon
+copies</em> of the notification message may be sent by including these
+as options in the reference</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push tr:kernel/common HEAD:refs/for/experimental%r=a@a.com,cc=b@o.com</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The <tt>r='email'</tt> and <tt>cc='email'</tt> options may be specified as many
+times as necessary to cover all interested parties. Gerrit will
+automatically avoid sending duplicate email notifications, such as
+if one of the specified reviewers or CC addresses had also requested
+to receive all new change notifications.</p></div>
+<div class="paragraph"><p>If you are frequently sending changes to the same parties and/or
+branches, consider adding a custom remote block to your project&#8217;s
+<tt>.git/config</tt> file:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ cat .git/config
+...
+[remote "exp"]
+  url = tr:kernel/common
+  push = HEAD:refs/for/experimental%r=a@a.com,cc=b@o.com</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git push exp</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="push_replace">Replace Changes</h3>
+<div class="paragraph"><p>To add an additional patch set to a change, ensure Change-Id
+lines were created in the original commit messages, and just use
+<tt>git push URL HEAD:refs/for/...</tt> as <a href="#push_create">described above</a>.
+Gerrit Code Review will automatically match the commits back to
+their original changes by taking advantage of the Change-Id lines.</p></div>
+<div class="paragraph"><p>If Change-Id lines are not present in the commit messages, consider
+amending the message and copying the line from the change&#8217;s page
+on the web, and then using <tt>git push</tt> as described above.</p></div>
+<div class="paragraph"><p>If Change-Id lines are not available, then the user must use the
+manual mapping technique described below.</p></div>
+<div class="paragraph"><p>For more about Change-Ids, see <a href="user-changeid.html">Change-Id Lines</a>.</p></div>
+<div class="sect3">
+<h4 id="manual_replacement_mapping">Manual Replacement Mapping</h4>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Deprecation Warning</div>
+<div class="paragraph"><p>The remainder of this section describes a manual method of replacing
+changes by matching each commit name to an existing change number.
+End-users should instead prefer to use Change-Id lines in their
+commit messages, as the process is then fully automated by Gerrit
+during normal uploads.</p></div>
+<div class="paragraph"><p>See above for the preferred technique of replacing changes.</p></div>
+</div></div>
+<div class="paragraph"><p>To add an additional patch set to a change, replacing it with an
+updated version of the same logical modification, send the new
+commit to the change&#8217;s ref.  For example, to add the commit whose
+SHA-1 starts with <tt>c0ffee</tt> as a new patch set for change number
+<tt>1979</tt>, use the push refspec <tt>c0ffee:refs/changes/1979</tt> as below:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push ssh://sshusername@hostname:29418/projectname c0ffee:refs/changes/1979</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>This form can be combined together with <tt>refs/for/'branchname'</tt>
+(above) to simultaneously create new changes and replace changes
+during one network transaction.</p></div>
+<div class="paragraph"><p>For example, consider the following sequence of events:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git commit -m A                    ; # create 3 commits
+$ git commit -m B
+$ git commit -m C</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git push ... HEAD:refs/for/master  ; # upload for review
+... A is 1500 ...
+... B is 1501 ...
+... C is 1502 ...</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git rebase -i HEAD~3               ; # edit "A", insert D before B
+                                     ; # now series is A'-D-B'-C'
+$ git push ...
+    HEAD:refs/for/master
+    HEAD~3:refs/changes/1500
+    HEAD~1:refs/changes/1501
+    HEAD~0:refs/changes/1502         ; # upload replacements</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>At the final step during the push Gerrit will attach A' as a new
+patch set on change 1500; B' as a new patch set on change 1501; C'
+as a new patch set on 1502; and D will be created as a new change.</p></div>
+<div class="paragraph"><p>Ensuring D is created as a new change requires passing the refspec
+<tt>HEAD:refs/for/branchname</tt>, otherwise Gerrit will ignore D and
+won&#8217;t do anything with it.  For this reason it is a good idea to
+always include the create change refspec when uploading replacements.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bypass_review">Bypass Review</h3>
+<div class="paragraph"><p>Changes (and annotated tags) can be pushed directly into a
+repository, bypassing the review process.  This is primarily useful
+for a project owner to create new branches, create annotated tags
+for releases, or to force-update a branch whose history needed to
+be rewritten.</p></div>
+<div class="paragraph"><p>Gerrit restricts direct pushes that bypass review to:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>refs/heads/*</tt>: any branch can be updated, created, deleted,
+or rewritten by the pusher.
+</p>
+</li>
+<li>
+<p>
+<tt>refs/tags/*</tt>: annotated tag objects pointing to any other type
+of Git object can be created.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>To push branches, the proper access rights must be configured first.
+Here follows a few examples of how to configure this in Gerrit:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Update: Any existing branch can be fast-forwarded to a new commit.
+This is the safest mode as commits cannot be discarded.  Creation
+of new branches is rejected. Can be configured with
+<a href="access-control.html#category_push_direct"><em>Push</em></a> access.
+</p>
+</li>
+<li>
+<p>
+Create: Allows creation of a new branch if the name does not
+already designate an existing branch name.  Needs
+<a href="access-control.html#category_create"><em>Create Reference</em></a>
+configured. Please note that once created, this permission doesn&#8217;t
+grant the right to update the branch with further commits (see above
+for update details).
+</p>
+</li>
+<li>
+<p>
+Delete: Implies Update, but also allows an existing
+branch to be deleted.  Since a force push is effectively a delete
+followed by a create, but performed atomically on the server and
+logged, this also permits forced push updates to branches.
+To grant this access, configure
+<a href="access-control.html#category_push_direct"><em>Push</em></a> with the
+<em>Force</em> option ticked.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>To push annotated tags, the <tt>Push Annotated Tag</tt> project right must
+be granted to one (or more) of the user&#8217;s groups.  There is only
+one level of access in this category.</p></div>
+<div class="paragraph"><p>Project owners may wish to grant themselves <tt>Push Annotated Tag</tt>
+only at times when a new release is being prepared, and otherwise
+grant nothing at all.  This ensures that accidental pushes don&#8217;t
+make undesired changes to the public repository.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_repo_upload">repo upload</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>repo is a multiple repository management tool, most commonly
+used by the Android Open Source Project.  For more details, see
+<a href="http://source.android.com/source/using-repo.html">using repo</a>.</p></div>
+<div class="sect2">
+<h3 id="repo_create">Create Changes</h3>
+<div class="paragraph"><p>To upload changes to a project using <tt>repo</tt>, ensure the manifest&#8217;s
+review field has been configured to point to the Gerrit server.
+Only the hostname or the web address needs to be given in the
+manifest file. During upload <tt>repo</tt> will automatically determine the
+correct port number by reading <tt>http://'reviewhostname'/ssh_info</tt>
+when its invoked.</p></div>
+<div class="paragraph"><p>Each new commit uploaded by <tt>repo upload</tt> will be converted into
+a change record on the server.  Other users (e.g. project owners)
+who have configured Gerrit to notify them of new changes will be
+automatically sent an email message.  Additional notifications can
+be sent through command line options.</p></div>
+<div class="paragraph"><p>For more details on using <tt>repo upload</tt>, see <tt>repo help upload</tt>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="repo_replace">Replace Changes</h3>
+<div class="paragraph"><p>To replace changes, ensure Change-Id lines were created in the
+commit messages, and just use <tt>repo upload</tt>.
+Gerrit Code Review will automatically match the commits back to
+their original changes by taking advantage of their Change-Id lines.</p></div>
+<div class="paragraph"><p>If Change-Id lines are not present in the commit messages, consider
+amending the message and copying the line from the change&#8217;s page
+on the web.</p></div>
+<div class="paragraph"><p>If Change-Id lines are not available, then the user must use the much
+more <a href="#manual_replacement_mapping">manual mapping technique</a> offered
+by using <tt>git push</tt> to a specific <tt>refs/changes/change#</tt> reference.</p></div>
+<div class="paragraph"><p>For more about Change-Ids, see <a href="user-changeid.html">Change-Id Lines</a>.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gritty_details">Gritty Details</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>As Gerrit implements the entire SSH and Git server stack within its
+own process space, Gerrit maintains complete control over how the
+repository is updated, and what responses are sent to the <tt>git push</tt>
+client invoked by the end-user, or by <tt>repo upload</tt>.  This allows
+Gerrit to provide magical refs, such as <tt>refs/for/*</tt> for new
+change submission and <tt>refs/changes/*</tt> for change replacement.
+When a push request is received to create a ref in one of these
+namespaces Gerrit performs its own logic to update the database,
+and then lies to the client about the result of the operation.
+A successful result causes the client to believe that Gerrit has
+created the ref, but in reality Gerrit hasn&#8217;t created the ref at all.</p></div>
+<div class="paragraph"><p>By implementing the entire server stack, Gerrit is also able to
+perform project level access control checks (to verify the end-user
+is permitted to access a project) prior to advertising the available
+refs, and potentially leaking information to a snooping client.
+Clients cannot tell the difference between <em>project not found</em> and
+<em>project exists, but access is denied</em>.</p></div>
+<div class="paragraph"><p>Gerrit can also ensure users have completed a valid Contributor
+Agreement prior to accepting any transferred objects, and if an
+agreement is required, but not completed, it aborts the network
+connection before data is sent.  This ensures that project owners
+can be certain any object available in their repository has been
+supplied under at least one valid agreement.</p></div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2013-06-10 12:17:19 PDT
+</div>
+</div>
+</body>
+</html>

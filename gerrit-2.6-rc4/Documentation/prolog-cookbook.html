@@ -1,0 +1,2165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Gerrit Code Review - Prolog Submit Rules Cookbook</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Gerrit Code Review - Prolog Submit Rules Cookbook</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_submit_rule">Submit Rule</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>A <em>Submit Rule</em> in Gerrit is logic that defines when a change is submittable.
+By default, a change is submittable when it gets at least one
+highest vote in each voting category and has no lowest vote (aka veto vote) in
+any category.  Typically, this means that a change needs <em>Code-Review+2</em>,
+<em>Verified+1</em> and has neither <em>Code-Review-2</em> nor <em>Verified-1</em> to become
+submittable.</p></div>
+<div class="paragraph"><p>While this rule is a good default, there are projects which need more
+flexibility for defining when a change is submittable.  In Gerrit, it is
+possible to use Prolog based rules to provide project specific submit rules and
+replace the default submit rules. Using Prolog based rules, project owners can
+define a set of criteria which must be fulfilled for a change to become
+submittable. For a change that is not submittable, the set of needed criteria
+is displayed in the Gerrit UI.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">Loading and executing Prolog submit rules may be disabled by setting
+<tt>rules.enabled=false</tt> in the Gerrit config file (see
+<a href="config-gerrit.html#_a_id_rules_a_section_rules">rules section</a>)</td>
+</tr></table>
+</div>
+<div class="paragraph"><p><a href="https://groups.google.com/d/topic/repo-discuss/wJxTGhlHZMM/discussion">This
+discussion thread</a> explains why Prolog was chosen for the purpose of writing
+project specific submit rules.
+<a href="http://gerrit-documentation.googlecode.com/svn/ReleaseNotes/ReleaseNotes-2.2.2.html">Gerrit
+2.2.2 ReleaseNotes</a> introduces Prolog support in Gerrit.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_submit_type">Submit Type</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>A <em>Submit Type</em> is a strategy that is used on submit to integrate the
+change into the destination branch. Supported submit types are:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>Fast Forward Only</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>Merge If Necessary</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>Merge Always</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>Cherry Pick</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>Rebase If Necessary</tt>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p><em>Submit Type</em> is a project global setting. This means that the same submit type
+is used for all changes of one project.</p></div>
+<div class="paragraph"><p>Projects which need more flexibility in choosing, or enforcing, a submit type
+can use Prolog based submit type which replaces the project&#8217;s default submit
+type.</p></div>
+<div class="paragraph"><p>Prolog based submit type computes a submit type for each change. The computed
+submit type is shown on the change screen for each change.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prolog_language">Prolog Language</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This document is not a complete Prolog tutorial.
+<a href="http://en.wikipedia.org/wiki/Prolog">This Wikipedia page on Prolog</a> is a
+good starting point for learning the Prolog language. This document will only explain
+some elements of Prolog that are necessary to understand the provided examples.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prolog_in_gerrit">Prolog in Gerrit</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Gerrit uses its own <a href="https://code.google.com/p/prolog-cafe/">fork</a> of the
+original <a href="http://kaminari.istc.kobe-u.ac.jp/PrologCafe/">prolog-cafe</a>
+project. Gerrit embeds the prolog-cafe library and can interpret Prolog programs at
+runtime.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interactive_prolog_cafe_shell">Interactive Prolog Cafe Shell</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>For interactive testing and playing with Prolog, Gerrit provides the
+<a href="pgm-prolog-shell.html">prolog-shell</a> program which opens an interactive
+Prolog interpreter shell.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">The interactive shell is just a prolog shell, it does not load
+a gerrit server environment and thus is not intended for <a href="#TestingSubmitRules">testing submit rules</a>.</td>
+</tr></table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_swi_prolog">SWI-Prolog</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Instead of using the <a href="pgm-prolog-shell.html">prolog-shell</a> program one can
+also use the <a href="http://www.swi-prolog.org/">SWI-Prolog</a> environment. It
+provides a better shell interface and a graphical source-level debugger.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_rules_pl_file">The rules.pl file</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This section explains how to create and edit project specific submit rules. How
+to actually write the submit rules is explained in the next section.</p></div>
+<div class="paragraph"><p>Project specific submit rules are stored in the <tt>rules.pl</tt> file in the
+<tt>refs/meta/config</tt> branch of that project.  Therefore, we need to fetch and
+checkout the <tt>refs/meta/config</tt> branch in order to create or edit the <tt>rules.pl</tt>
+file:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ git fetch origin refs/meta/config:config
+$ git checkout config
+... edit or create the rules.pl file
+$ git add rules.pl
+$ git commit -m "My submit rules"
+$ git push origin HEAD:refs/meta/config</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="HowToWriteSubmitRules">How to write submit rules</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Whenever Gerrit needs to evaluate submit rules for a change <tt>C</tt> from project <tt>P</tt> it
+will first initialize the embedded Prolog interpreter by:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+consulting a set of facts about the change <tt>C</tt>
+</p>
+</li>
+<li>
+<p>
+consulting the <tt>rules.pl</tt> from the project <tt>P</tt>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Conceptually we can imagine that Gerrit adds a set of facts about the change
+<tt>C</tt> on top of the <tt>rules.pl</tt> file and then consults it. The set of facts about
+the change <tt>C</tt> will look like:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>:- package gerrit.                                                   <b>&lt;1&gt;</b></tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>commit_author(user(1000000), 'John Doe', 'john.doe@example.com').    <b>&lt;2&gt;</b>
+commit_committer(user(1000000), 'John Doe', 'john.doe@example.com'). <b>&lt;3&gt;</b>
+commit_message('Add plugin support to Gerrit').                      <b>&lt;4&gt;</b>
+...</tt></pre>
+</div></div>
+</div></div>
+<div class="colist arabic"><ol>
+<li>
+<p>
+Gerrit will provide its facts in a package named <tt>gerrit</tt>. This means we
+have to use qualified names when writing our code and referencing these facts.
+For example: <tt>gerrit:commit_author(ID, N, M)</tt>
+</p>
+</li>
+<li>
+<p>
+user ID, full name and email address of the commit author
+</p>
+</li>
+<li>
+<p>
+user ID, full name and email address of the commit committer
+</p>
+</li>
+<li>
+<p>
+commit message
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>A complete set of facts which Gerrit provides about the change is listed in the
+<a href="prolog-change-facts.html">Prolog Facts for Gerrit Change</a>.</p></div>
+<div class="paragraph"><p>By default, Gerrit will search for a <tt>submit_rule/1</tt> predicate in the <tt>rules.pl</tt>
+file, evaluate the <tt>submit_rule(X)</tt> and then inspect the value of <tt>X</tt> in order
+to decide whether the change is submittable or not and also to find the set of
+needed criteria for the change to become submittable. This means that Gerrit has an
+expectation on the format and value of the result of the <tt>submit_rule</tt> predicate
+which is expected to be a <tt>submit</tt> term of the following format:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit(label(label-name, status) [, label(label-name, status)]*)</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>where <tt>label-name</tt> is usually <tt>'Code-Review'</tt> or <tt>'Verified'</tt> but could also
+be any other string (see examples below). The <tt>status</tt> is one of:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>ok(user(ID))</tt> or just <tt>ok(_)</tt> if user info is not important. This status is
+   used to tell that this label/category has been met.
+</p>
+</li>
+<li>
+<p>
+<tt>need(_)</tt> is used to tell that this label/category is needed for change to
+   become submittable
+</p>
+</li>
+<li>
+<p>
+<tt>reject(user(ID))</tt> or just <tt>reject(_)</tt>. This status is used to tell that label/category
+   is blocking change submission
+</p>
+</li>
+<li>
+<p>
+<tt>impossible(_)</tt> is used when the logic knows that the change cannot be submitted as-is.
+   Administrative intervention is probably required. This is meant for cases
+   where the logic requires members of "FooEng" to score "Code-Review +2" on a
+   change, but nobody is in group "FooEng". It is to hint at permissions
+   misconfigurations.
+</p>
+</li>
+<li>
+<p>
+<tt>may(_)</tt> allows expression of approval categories that are optional, i.e.
+   could either be set or unset without ever influencing whether the change
+   could be submitted.
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">For a change to be submittable all <tt>label</tt> terms contained in the returned
+<tt>submit</tt> term must have either <tt>ok</tt> or <tt>may</tt> status.</td>
+</tr></table>
+</div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">Gerrit will let the Prolog engine continue searching for solutions of
+the <tt>submit_rule(X)</tt> query until it finds the first one where all labels in the
+return result have either status <tt>ok</tt> or <tt>may</tt> or there are no more solutions.
+If a solution where all labels have status <tt>ok</tt> is found then all previously
+found solutions are ignored. Otherwise, all labels names with status <tt>need</tt>
+from all solutions will be displayed in the UI indicating the set of conditions
+needed for the change to become submittable.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>Here some examples of possible return values from the <tt>submit_rule</tt> predicate:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit(label('Code-Review', ok(_)))                               <b>&lt;1&gt;</b>
+submit(label('Code-Review', ok(_)), label('Verified', reject(_))) <b>&lt;2&gt;</b>
+submit(label('Author-is-John-Doe', need(_))                       <b>&lt;3&gt;</b></tt></pre>
+</div></div>
+</div></div>
+<div class="colist arabic"><ol>
+<li>
+<p>
+label <tt>'Code-Review'</tt> is met. As there are no other labels in the
+    return result, the change is submittable.
+</p>
+</li>
+<li>
+<p>
+label <tt>'Verified'</tt> is rejected. Change is not submittable.
+</p>
+</li>
+<li>
+<p>
+label <tt>'Author-is-John-Doe'</tt> is needed for the change to become submittable.
+    Note that this tells nothing about how this criteria will be met. It is up
+    to the implementor of the <tt>submit_rule</tt> to return <tt>label('Author-is-John-Doe',
+    ok(_))</tt> when this criteria is met.  Most likely, it will have to match
+    against <tt>gerrit:commit_author</tt> in order to check if this criteria is met.
+    This will become clear through the examples below.
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Of course, when implementing the <tt>submit_rule</tt> we will use the facts about the
+change that are already provided by Gerrit.</p></div>
+<div class="paragraph"><p>Another aspect of the return result from the <tt>submit_rule</tt> predicate is that
+Gerrit uses it to decide which set of labels to display on the change review
+screen for voting. If the return result contains label <tt>'ABC'</tt> and if the label
+<tt>'ABC'</tt> is <a href="config-labels.html">defined for the project</a> then voting for the
+label <tt>'ABC'</tt> will be displayed. Otherwise, it is not displayed. Note that the
+project doesn&#8217;t need a defined label for each label contained in the result of
+<tt>submit_rule</tt> predicate.  For example, the decision whether <tt>'Author-is-John-Doe'</tt>
+label is met will probably not be made by explicit voting but, instead, by
+inspecting the facts about the change.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="SubmitFilter">Submit Filter</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Another mechanism of changing the default submit rules is to implement the
+<tt>submit_filter/2</tt> predicate. While Gerrit will search for the <tt>submit_rule</tt> only
+in the <tt>rules.pl</tt> file of the current project, the <tt>submit_filter</tt> will be
+searched for in the <tt>rules.pl</tt> of all parent projects of the current project,
+but not in the <tt>rules.pl</tt> of the current project. The search will start from the
+immediate parent of the current project, then in the parent project of that
+project and so on until, and including, the <em>All-Projects</em> project.</p></div>
+<div class="paragraph"><p>The purpose of the submit filter is, as its name says, to filter the results
+of the <tt>submit_rule</tt>. Therefore, the <tt>submit_filter</tt> predicate has two
+parameters:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_filter(In, Out) :- ...</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Gerrit will invoke <tt>submit_filter</tt> with the <tt>In</tt> parameter containing a <tt>submit</tt>
+structure produced by the <tt>submit_rule</tt> and will take the value of the <tt>Out</tt>
+parameter as the result.</p></div>
+<div class="paragraph"><p>The <tt>Out</tt> value of a <tt>submit_filter</tt> will become the <tt>In</tt> value for the
+next <tt>submit_filter</tt> in the parent line. The value of the <tt>Out</tt> parameter
+of the top-most <tt>submit_filter</tt> is the final result of the submit rule that
+is used to decide whether a change is submittable or not.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content"><tt>submit_filter</tt> is a mechanism for Gerrit administrators to implement
+and enforce submit rules that would apply to all projects while <tt>submit_rule</tt> is
+a mechanism for project owners to implement project specific submit rules.
+However, project owners who own several projects could also make use of
+<tt>submit_filter</tt> by using a common parent project for all their projects and
+implementing the <tt>submit_filter</tt> in this common parent project. This way they
+can avoid implementing the same <tt>submit_rule</tt> in all their projects.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>The following "drawing" illustrates the order of the invocation and the chaining
+of the results of the <tt>submit_rule</tt> and <tt>submit_filter</tt> predicates.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>All-Projects
+^   submit_filter(B, S) :- ...  <b>&lt;4&gt;</b>
+|
+Parent-3
+^   &lt;no submit filter here&gt;
+|
+Parent-2
+^   submit_filter(A, B) :- ...  <b>&lt;3&gt;</b>
+|
+Parent-1
+^   submit_filter(X, A) :- ...  <b>&lt;2&gt;</b>
+|
+MyProject
+    submit_rule(X) :- ...       <b>&lt;1&gt;</b></tt></pre>
+</div></div>
+</div></div>
+<div class="colist arabic"><ol>
+<li>
+<p>
+The <tt>submit_rule</tt> of <tt>MyProject</tt> is invoked first.
+</p>
+</li>
+<li>
+<p>
+The result <tt>X</tt> is filtered through the <tt>submit_filter</tt> from the <tt>Parent-1</tt>
+project.
+</p>
+</li>
+<li>
+<p>
+The result of <tt>submit_filter</tt> from <tt>Parent-1</tt> project is filtered by the
+<tt>submit_filter</tt> in the <tt>Parent-2</tt> project. Since <tt>Parent-3</tt> project doesn&#8217;t have
+a <tt>submit_filter</tt> it is skipped.
+</p>
+</li>
+<li>
+<p>
+The result of <tt>submit_filter</tt> from <tt>Parent-2</tt> project is filtered by the
+<tt>submit_filter</tt> in the <tt>All-Projects</tt> project. The value in <tt>S</tt> is the final
+value of the submit rule evaluation.
+</p>
+</li>
+</ol></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">If <tt>MyProject</tt> doesn&#8217;t define its own <tt>submit_rule</tt> Gerrit will invoke the
+default implementation of submit rule that is named <tt>gerrit:default_submit</tt> and
+its result will be filtered as described above.</td>
+</tr></table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="HowToWriteSubmitType">How to write submit type</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Writing custom submit type logic in Prolog is the similar top
+<a href="#HowToWriteSubmitRules">writing submit rules</a>. The only difference is that
+one has to implement a <tt>submit_type</tt> predicate (instead of the <tt>submit_rule</tt>)
+and that the return result of the <tt>submit_type</tt> has to be an atom that
+represents one of the supported submit types:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>fast_forward_only</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>merge_if_necessary</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>merge_always</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>cherry_pick</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>rebase_if_necessary</tt>
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_submit_type_filter">Submit Type Filter</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Submit type filter works the same way as the <a href="#SubmitFilter">Submit Filter</a>
+where the name of the filter predicate is <tt>submit_type_filter</tt>.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_type_filter(In, Out).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Gerrit will invoke <tt>submit_type_filter</tt> with the <tt>In</tt> parameter containing a
+result of the <tt>submit_type</tt> and will take the value of the <tt>Out</tt> parameter as
+the result.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="TestingSubmitRules">Testing submit rules</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The prolog environment running the <tt>submit_rule</tt> is loaded with state describing the
+change that is being evaluated. The easiest way to load this state is to test your
+<tt>submit_rule</tt> against a real change on a running gerrit instance. The command
+<a href="cmd-test-submit-rule.html">test-submit-rule</a> loads a specific change and executes
+the <tt>submit_rule</tt>. It optionally reads the rule from from <tt>stdin</tt> to facilitate easy testing.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>cat rules.pl | ssh gerrit_srv gerrit test-submit-rule I45e080b105a50a625cc8e1fb5b357c0bfabe6d68 -s</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prolog_vs_gerrit_plugin_for_project_specific_submit_rules">Prolog vs Gerrit plugin for project specific submit rules</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Since version 2.5 Gerrit supports plugins and extension points. A plugin or an
+extension point could also be used as another means to provide custom submit
+rules. One could ask for a guideline when to use Prolog based submit rules and
+when to go for writing a new plugin. Writing a Prolog program is usually much
+faster than writing a Gerrit plugin. Prolog based submit rules can be pushed
+to a project by project owners while Gerrit plugins could only be installed by
+Gerrit administrators. In addition, Prolog based submit rules can be pushed
+for review by pushing to <tt>refs/for/refs/meta/config</tt> branch.</p></div>
+<div class="paragraph"><p>On the other hand, Prolog based submit rules get a limited amount of facts about
+the change exposed to them. Gerrit plugins get full access to Gerrit internals
+and can potentially check more things than Prolog based rules.</p></div>
+<div class="paragraph"><p>From version 2.6 Gerrit plugins can contribute Prolog predicates. This way, we
+can make use of the plugin provided predicates when writing Prolog based rules.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples_submit_rule">Examples - Submit Rule</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The following examples should serve as a cookbook for developing own submit rules.
+Some of them are too trivial to be used in production and their only purpose is
+to provide step by step introduction and understanding.</p></div>
+<div class="paragraph"><p>Some of the examples will implement the <tt>submit_rule</tt> and some will implement
+the <tt>submit_filter</tt> just to show both possibilities.  Remember that
+<tt>submit_rule</tt> is only invoked from the current project and <tt>submit_filter</tt> is
+invoked from all parent projects. This is the most important fact in deciding
+whether to implement <tt>submit_rule</tt> or <tt>submit_filter</tt>.</p></div>
+<div class="sect2">
+<h3 id="_example_1_make_every_change_submittable">Example 1: Make every change submittable</h3>
+<div class="paragraph"><p>Let&#8217;s start with a most trivial example where we would make every change submittable
+regardless of the votes it has:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(W)) :-
+  W = label('Any-Label-Name', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>In this case we make no use of facts about the change. We don&#8217;t need it as we are simply
+making every change submittable. Note that, in this case, the Gerrit UI will not show
+the UI for voting for the standard <tt>'Code-Review'</tt> and <tt>'Verified'</tt> categories as labels
+with these names are not part of the return result. The <tt>'Any-Label-Name'</tt> could really
+be any string.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_2_every_change_submittable_and_voting_in_the_standard_categories_possible">Example 2: Every change submittable and voting in the standard categories possible</h3>
+<div class="paragraph"><p>This is continuation of the previous example where, in addition, to making
+every change submittable we want to enable voting in the standard
+<tt>'Code-Review'</tt> and <tt>'Verified'</tt> categories.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR, V)) :-
+  CR = label('Code-Review', ok(_)),
+  V = label('Verified', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Since for every change all label statuses are <tt>'ok'</tt> every change will be submittable.
+Voting in the standard labels will be shown in the UI as the standard label names are
+included in the return result.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_3_nothing_is_submittable">Example 3: Nothing is submittable</h3>
+<div class="paragraph"><p>This example shows how to make all changes non-submittable regardless of the
+votes they have.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(R)) :-
+  R = label('Any-Label-Name', reject(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Since for any change we return only one label with status <tt>reject</tt>, no change
+will be submittable. The UI will, however, not indicate what is needed for a
+change to become submittable as we return no labels with status <tt>need</tt>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_4_nothing_is_submittable_but_ui_shows_several_em_need_8230_em_criteria">Example 4: Nothing is submittable but UI shows several <em>Need &#8230;</em> criteria</h3>
+<div class="paragraph"><p>In this example no change is submittable but here we show how to present <em>Need
+&lt;label&gt;</em> information to the user in the UI.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>% In the UI this will show: Need Any-Label-Name
+submit_rule(submit(N)) :-
+  N = label('Any-Label-Name', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% We could define more "need" labels by adding more rules
+submit_rule(submit(N)) :-
+  N = label('Another-Label-Name', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% or by providing more than one need label in the same rule
+submit_rule(submit(NX, NY)) :-
+  NX = label('X-Label-Name', need(_)),
+  NY = label('Y-Label-Name', need(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>In the UI this will show:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+Need Any-Label-Name
+</p>
+</li>
+<li>
+<p>
+Need Another-Label-Name
+</p>
+</li>
+<li>
+<p>
+Need X-Label-Name
+</p>
+</li>
+<li>
+<p>
+Need Y-Label-Name
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="paragraph"><p>From the example above we can see a few more things:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+comment in Prolog starts with the <tt>%</tt> character
+</p>
+</li>
+<li>
+<p>
+there could be multiple <tt>submit_rule</tt> predicates. Since Prolog, by default, tries to find
+  all solutions for a query, the result will be union of all solutions.
+  Therefore, we see all 4 <tt>need</tt> labels in the UI.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_example_5_the_em_need_8230_em_labels_not_shown_when_change_is_submittable">Example 5: The <em>Need &#8230;</em> labels not shown when change is submittable</h3>
+<div class="paragraph"><p>This example shows that, when there is a solution for <tt>submit_rule(X)</tt> where all labels
+have status <tt>ok</tt> then Gerrit will not show any labels with the <tt>need</tt> status from
+any of the previous <tt>submit_rule(X)</tt> solutions.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(N)) :-
+  N = label('Some-Condition', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(OK)) :-
+  OK = label('Another-Condition', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The <em>Need Some-Condition</em> will not be show in the UI because of the result of
+the second rule.</p></div>
+<div class="paragraph"><p>The same is valid if the two rules are swapped:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(OK)) :-
+  OK = label('Another-Condition', ok(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(N)) :-
+  N = label('Some-Condition', need(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The result of the first rule will stop search for any further solutions.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_6_make_change_submittable_if_commit_author_is_john_doe">Example 6: Make change submittable if commit author is "John Doe"</h3>
+<div class="paragraph"><p>This is the first example where we will use the Prolog facts about a change that
+are automatically exposed by Gerrit. Our goal is to make any change submittable
+when the commit author is named <tt>'John Doe'</tt>. In the very first
+step let&#8217;s make sure Gerrit UI shows <em>Need Author-is-John-Doe</em> in
+the UI to clearly indicate to the user what is needed for a change to become
+submittable:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  Author = label('Author-is-John-Doe', need(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>This will show:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="ulist"><ul>
+<li>
+<p>
+Need Author-is-John-Doe
+</p>
+</li>
+</ul></div>
+</div></div>
+<div class="paragraph"><p>in the UI but no change will be submittable yet. Let&#8217;s add another rule:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  Author = label('Author-is-John-Doe', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  gerrit:commit_author(_, 'John Doe', _),
+  Author = label('Author-is-John-Doe', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>In the second rule we return <tt>ok</tt> status for the <tt>'Author-is-John-Doe'</tt> label
+if there is a <tt>commit_author</tt> fact where the full name is <tt>'John Doe'</tt>. If
+author of a change is <tt>'John Doe'</tt> then the second rule will return a solution
+where all labels have <tt>ok</tt> status and the change will become submittable. If
+author of a change is not <tt>'John Doe'</tt> then only the first rule will produce a
+solution. The UI will show <em>Need Author-is-John-Doe</em> but, as expected, the
+change will not be submittable.</p></div>
+<div class="paragraph"><p>Instead of checking by full name we could also check by the email address:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  Author = label('Author-is-John-Doe', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  gerrit:commit_author(_, _, 'john.doe@example.com'),
+  Author = label('Author-is-John-Doe', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>or by user id (assuming it is 1000000):</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  Author = label('Author-is-John-Doe', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  gerrit:commit_author(user(1000000), _, _),
+  Author = label('Author-is-John-Doe', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>or by a combination of these 3 attributes:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  Author = label('Author-is-John-Doe', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Author)) :-
+  gerrit:commit_author(_, 'John Doe', 'john.doe@example.com'),
+  Author = label('Author-is-John-Doe', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_7_make_change_submittable_if_commit_message_starts_with_fix">Example 7: Make change submittable if commit message starts with "Fix "</h3>
+<div class="paragraph"><p>Besides showing how to make use of the commit message text the purpose of this
+example is also to show how to match only a part of a string symbol. Similarly
+like commit author the commit message is provided as a string symbol which is
+an atom in Prolog terms. When working with an atom we could only match against
+the whole value. To match only part of a string symbol we have, at least, two
+options:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+convert the string symbol into a list of characters and then perform
+  the "classical" list matching
+</p>
+</li>
+<li>
+<p>
+use the <tt>regex_matches/2</tt> or, even more convenient, the
+  <tt>gerrit:commit_message_matches/1</tt> predicate
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Let&#8217;s implement both options:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Fix)) :-
+  Fix = label('Commit-Message-starts-with-Fix', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Fix)) :-
+  gerrit:commit_message(M), name(M, L), starts_with(L, "Fix "),
+  Fix = label('Commit-Message-starts-with-Fix', ok(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>starts_with(L, []).
+starts_with([H|T1], [H|T2]) :- starts_with(T1, T2).</tt></pre>
+</div></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">The <tt>name/2</tt> embedded predicate is used to convert a string symbol into a
+list of characters. A string <tt>abc</tt> is converted into a list of characters <tt>[97,
+98, 99]</tt>.  A double quoted string in Prolog is just a shortcut for creating a
+list of characters. <tt>"abc"</tt> is a shortcut for <tt>[97, 98, 99]</tt>. This is why we use
+double quotes for the <tt>"Trivial Fix"</tt> in the example above.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>The <tt>starts_with</tt> predicate is self explaining.</p></div>
+<div class="paragraph"><p>Using the <tt>gerrit:commit_message_matches</tt> predicate is probably more efficient:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Fix)) :-
+  Fix = label('Commit-Message-starts-with-Fix', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Fix)) :-
+  gerrit:commit_message_matches('^Fix '),
+  Fix = label('Commit-Message-starts-with-Fix', ok(_)).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The previous example could also be written so that it first checks if the commit
+message starts with 'Fix '. If true then it sets OK for that category and stops
+further backtracking by using the cut <tt>!</tt> operator:
+.rules.pl</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(Fix)) :-
+  gerrit:commit_message_matches('^Fix '),
+  Fix = label('Commit-Message-starts-with-Fix', ok(_)),
+  !.</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% Message does not start with 'Fix ' so Fix is needed to submit
+submit_rule(submit(Fix)) :-
+  Fix = label('Commit-Message-starts-with-Fix', need(_)).</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_default_submit_policy">The default submit policy</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>All examples until now concentrate on one particular aspect of change data.
+However, in real-life scenarios we would rather want to reuse Gerrit&#8217;s default
+submit policy and extend/change it for our specific purpose.  This could be
+done in one of the following ways:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+understand how the default submit policy is implemented and use that as a
+  template for implementing custom submit rules,
+</p>
+</li>
+<li>
+<p>
+invoke the default submit rule implementation and then perform further
+  actions on its return result.
+</p>
+</li>
+</ul></div>
+<div class="sect2">
+<h3 id="_default_submit_rule_implementation">Default submit rule implementation</h3>
+<div class="paragraph"><p>The default submit rule with the two default categories, <tt>Code-Review</tt> and
+<tt>Verified</tt>, can be implemented as:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(V, CR)) :-
+  gerrit:max_with_block(-2, 2, 'Code-Review', CR),
+  gerrit:max_with_block(-1, 1, 'Verified', V).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Once this implementation is understood it can be customized to implement
+project specific submit rules. Note, that this implementation hardcodes
+the two default categories. Introducing a new category in the database would
+require introducing the same category here or a <tt>submit_filter</tt> in a parent
+project would have to care about including the new category in the result of
+this <tt>submit_rule</tt>.  On the other side, this example is easy to read and
+understand.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_reusing_the_default_submit_policy">Reusing the default submit policy</h3>
+<div class="paragraph"><p>To get results of Gerrits default submit policy we use the
+<tt>gerrit:default_submit</tt> predicate.  The <tt>gerrit:default_submit(X)</tt> includes all
+categories from the database.  This means that if we write a submit rule like:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(X) :- gerrit:default_submit(X).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>then this is equivalent to not using <tt>rules.pl</tt> at all. We just delegate to
+default logic. However, once we invoke the <tt>gerrit:default_submit(X)</tt> we can
+perform further actions on the return result <tt>X</tt> and apply our specific
+logic. The following pattern illustrates this technique:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :- gerrit:default_submit(R), project_specific_policy(R, S).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>project_specific_policy(R, S) :- ...</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>In the following examples both styles will be shown.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_8_make_change_submittable_only_if_tt_code_review_2_tt_is_given_by_a_non_author">Example 8: Make change submittable only if <tt>Code-Review+2</tt> is given by a non author</h3>
+<div class="paragraph"><p>In this example we introduce a new label <tt>Non-Author-Code-Review</tt> and make it
+satisfied if there is at least one <tt>Code-Review+2</tt> from a non author. All other
+default policies like the <tt>Verified</tt> category and vetoing changes still apply.</p></div>
+<div class="sect3">
+<h4 id="_reusing_the_tt_gerrit_default_submit_tt">Reusing the <tt>gerrit:default_submit</tt></h4>
+<div class="paragraph"><p>First, we invoke <tt>gerrit:default_submit</tt> to compute the result for the default
+submit policy and then add the <tt>Non-Author-Code-Review</tt> label to it.  The
+<tt>Non-Author-Code-Review</tt> label is added with status <tt>ok</tt> if such an approval
+exists or with status <tt>need</tt> if it doesn&#8217;t exist.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(X),
+  X =.. [submit | Ls],
+  add_non_author_approval(Ls, R),
+  S =.. [submit | R].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>add_non_author_approval(S1, S2) :-
+  gerrit:commit_author(A),
+  gerrit:commit_label(label('Code-Review', 2), R),
+  R \= A, !,
+  S2 = [label('Non-Author-Code-Review', ok(R)) | S1].
+add_non_author_approval(S1, [label('Non-Author-Code-Review', need(_)) | S1]).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>This example uses the <tt>univ</tt> operator <tt>=..</tt> to "unpack" the result of the
+default_submit, which is a structure of the form <tt>submit(label('Code-Review',
+ok(_)), label('Verified', need(_)) ...)</tt> into a list like <tt>[submit,
+label('Code-Review', ok(_)), label('Verified', need(_)), ...]</tt>.  Then we
+process the tail of the list (the list of labels) as a Prolog list, which is
+much easier than processing a structure. In the end we use the same <tt>univ</tt>
+operator to convert the resulting list of labels back into a <tt>submit</tt> structure
+which is expected as a return result. The <tt>univ</tt> operator works both ways.</p></div>
+<div class="paragraph"><p>In <tt>add_non_author_approval</tt> we use the <tt>cut</tt> operator <tt>!</tt> to prevent Prolog
+from searching for more solutions once the <tt>cut</tt> point is reached. This is
+important because in the second <tt>add_non_author_approval</tt> rule we just add the
+<tt>label('Non-Author-Code-Review', need(_))</tt> without first checking that there
+is no non author <tt>Code-Review+2</tt>. The second rule will only be reached
+if the <tt>cut</tt> in the first rule is not reached and it only happens if a
+predicate before the <tt>cut</tt> fails.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_don_8217_t_use_tt_gerrit_default_submit_tt">Don&#8217;t use <tt>gerrit:default_submit</tt></h4>
+<div class="paragraph"><p>Let&#8217;s implement the same submit rule the other way, without reusing the
+<tt>gerrit:default_submit</tt>:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR, V)) :-
+  base(CR, V),
+  CR = label(_, ok(Reviewer)),
+  gerrit:commit_author(Author),
+  Author \= Reviewer,
+  !.</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR, V, N)) :-
+  base(CR, V),
+  N = label('Non-Author-Code-Review', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>base(CR, V) :-
+  gerrit:max_with_block(-2, 2, 'Code-Review', CR),
+  gerrit:max_with_block(-1, 1, 'Verified', V).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The latter implementation is probably easier to understand and the code looks
+cleaner. Note, however, that the latter implementation will always return the
+two standard categories only (<tt>Code-Review</tt> and <tt>Verified</tt>) even if a new
+category has beeen inserted into the database. To include the new category
+the <tt>rules.pl</tt> would need to be modified or a <tt>submit_filter</tt> in a parent
+project would have to care about including the new category in the result
+of this <tt>submit_rule</tt>.</p></div>
+<div class="paragraph"><p>The former example, however, would include any newly added category as it
+invokes the <tt>gerrit:default_submit</tt> and then modifies its result.</p></div>
+<div class="paragraph"><p>Which of these two behaviors is desired will always depend on how a particular
+Gerrit server is managed.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_9_remove_the_tt_verified_tt_category">Example 9: Remove the <tt>Verified</tt> category</h3>
+<div class="paragraph"><p>A project has no build and test. It consists of only text files and needs only
+code review.  We want to remove the <tt>Verified</tt> category from this project so
+that <tt>Code-Review+2</tt> is the only criteria for a change to become submittable.
+We also want the UI to not show the <tt>Verified</tt> category in the table with
+votes and on the voting screen.</p></div>
+<div class="paragraph"><p>This is quite simple without reusing the 'gerrit:default_submit`:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR)) :-
+  gerrit:max_with_block(-2, 2, 'Code-Review', CR).</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Implementing the same rule by reusing <tt>gerrit:default_submit</tt> is a bit more complex:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(X),
+  X =.. [submit | Ls],
+  remove_verified_category(Ls, R),
+  S =.. [submit | R].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>remove_verified_category([], []).
+remove_verified_category([label('Verified', _) | T], R) :- remove_verified_category(T, R), !.
+remove_verified_category([H|T], [H|R]) :- remove_verified_category(T, R).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_10_combine_examples_8_and_9">Example 10: Combine examples 8 and 9</h3>
+<div class="paragraph"><p>In this example we want to both remove the verified and have the four eyes
+principle.  This means we want a combination of examples 7 and 8.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(X),
+  X =.. [submit | Ls],
+  remove_verified_category(Ls, R1),
+  add_non_author_approval(R1, R),
+  S =.. [submit | R].</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The <tt>remove_verified_category</tt> and <tt>add_non_author_approval</tt> predicates are the
+same as defined in the previous two examples.</p></div>
+<div class="paragraph"><p>Without reusing the <tt>gerrit:default_submit</tt> the same example may be implemented
+as:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR)) :-
+  base(CR),
+  CR = label(_, ok(Reviewer)),
+  gerrit:commit_author(Author),
+  Author \= Reviewer,
+  !.</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR, N)) :-
+  base(CR),
+  N = label('Non-Author-Code-Review', need(_)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>base(CR) :-
+  gerrit:max_with_block(-2, 2, 'Code-Review', CR),</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_11_remove_the_tt_verified_tt_category_from_all_projects">Example 11: Remove the <tt>Verified</tt> category from all projects</h3>
+<div class="paragraph"><p>Example 9, implements <tt>submit_rule</tt> that removes the <tt>Verified</tt> category from
+one project. In this example we do the same but we want to remove the <tt>Verified</tt>
+category from all projects. This means we have to implement <tt>submit_filter</tt> and
+we have to do that in the <tt>rules.pl</tt> of the <tt>All-Projects</tt> project.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_filter(In, Out) :-
+  In =.. [submit | Ls],
+  remove_verified_category(Ls, R),
+  Out =.. [submit | R].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>remove_verified_category([], []).
+remove_verified_category([label('Verified', _) | T], R) :-
+  remove_verified_category(T, R), !.
+remove_verified_category([H|T], [H|R]) :- remove_verified_category(T, R).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_12_on_release_branches_require_drno_in_addition_to_project_rules">Example 12: On release branches require DrNo in addition to project rules</h3>
+<div class="paragraph"><p>A new category <em>DrNo</em> is added to the database and is required for release
+branches. To mark a branch as a release branch we use <tt>drno('refs/heads/branch')</tt>.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>drno('refs/heads/master').
+drno('refs/heads/stable-2.3').
+drno('refs/heads/stable-2.4').
+drno('refs/heads/stable-2.5').
+drno('refs/heads/stable-2.5').</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_filter(In, Out) :-
+  gerrit:change_branch(Branch),
+  drno(Branch),
+  !,
+  In =.. [submit | I],
+  gerrit:max_with_block(-1, 1, 'DrNo', DrNo),
+  Out =.. [submit, DrNo | I].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_filter(In, Out) :- In = Out.</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_13_1_1_2_code_review">Example 13: 1+1=2 Code-Review</h3>
+<div class="paragraph"><p>In this example we introduce accumulative voting to determine if a change is
+submittable or not. We modify the standard Code-Review to be accumulative, and make the
+change submittable if the total score is 2 or higher.</p></div>
+<div class="paragraph"><p>The code in this example is very similar to Example 8, with the addition of findall/3
+and gerrit:remove_label.
+The findall/3 embedded predicate is used to form a list of all objects that satisfy a
+specified Goal. In this example it is used to get a list of all the <em>Code-Review</em> scores.
+gerrit:remove_label is a built-in helper that is implemented similarly to the
+<em>remove_verified_category</em> as seen in the previous example.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>sum_list([], 0).
+sum_list([H | Rest], Sum) :- sum_list(Rest,Tmp), Sum is H + Tmp.</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>add_category_min_score(In, Category, Min,  P) :-
+  findall(X, gerrit:commit_label(label(Category,X),R),Z),
+  sum_list(Z, Sum),
+  Sum &gt;= Min, !,
+  P = [label(Category,ok(R)) | In].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>add_category_min_score(In, Category,Min,P) :-
+  P = [label(Category,need(Min)) | In].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(X),
+  X =.. [submit | Ls],
+  gerrit:remove_label(Ls,label('Code-Review',_),NoCR),
+  add_category_min_score(NoCR,'Code-Review', 2, Labels),
+  S =.. [submit | Labels].</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Implementing the same example without using <tt>gerrit:default_submit</tt>:</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(submit(CR, V)) :-
+  sum(2, 'Code-Review', CR),
+  gerrit:max_with_block(-1, 1, 'Verified', V).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% Sum the votes in a category. Uses a helper function score/2
+% to select out only the score values the given category.
+sum(VotesNeeded, Category, label(Category, ok(_))) :-
+  findall(Score, score(Category, Score), All),
+  sum_list(All, Sum),
+  Sum &gt;= VotesNeeded,
+  !.
+sum(VotesNeeded, Category, label(Category, need(VotesNeeded))).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>score(Category, Score) :-
+  gerrit:commit_label(label(Category, Score), User).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% Simple Prolog routine to sum a list of integers.
+sum_list(List, Sum)   :- sum_list(List, 0, Sum).
+sum_list([X|T], Y, S) :- Z is X + Y, sum_list(T, Z, S).
+sum_list([], S, S).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_14_master_and_apprentice">Example 14: Master and apprentice</h3>
+<div class="paragraph"><p>The master and apprentice example allow you to specify a user (the <tt>master</tt>)
+that must approve all changes done by another user (the <tt>apprentice</tt>).</p></div>
+<div class="paragraph"><p>The code first checks if the commit author is in the apprentice database.
+If the commit is done by an apprentice, it will check if there is a +2
+review by the associated <tt>master</tt>.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>% master_apprentice(Master, Apprentice).
+% Extend this with appropriate user-id's for your master/apprentice setup.
+master_apprentice(user(1000064), user(1000000)).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(In),
+  In =.. [submit | Ls],
+  add_apprentice_master(Ls, R),
+  S =.. [submit | R].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>check_master_approval(S1, S2, Master) :-
+  gerrit:commit_label(label('Code-Review', 2), R),
+  R = Master, !,
+  S2 = [label('Master-Approval', ok(R)) | S1].
+check_master_approval(S1, [label('Master-Approval', need(_)) | S1], _).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>add_apprentice_master(S1, S2) :-
+  gerrit:commit_author(Id),
+  master_apprentice(Master, Id),
+  !,
+  check_master_approval(S1, S2, Master).</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>add_apprentice_master(S, S).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_15_only_allow_author_to_submit_change">Example 15: Only allow Author to submit change</h3>
+<div class="paragraph"><p>This example adds a new needed category <tt>Patchset-Author</tt> for any user that is
+not the author of the patch. This effectively blocks all users except the author
+from submitting the change. This could result in an impossible situation if the
+author does not have permissions for submitting the change.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_rule(S) :-
+  gerrit:default_submit(In),
+  In =.. [submit | Ls],
+  only_allow_author_to_submit(Ls, R),
+  S =.. [submit | R].</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>only_allow_author_to_submit(S, S) :-
+  gerrit:commit_author(Id),
+  gerrit:current_user(Id),
+  !.</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>only_allow_author_to_submit(S1, [label('Patchset-Author', need(_)) | S1]).</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples_submit_type">Examples - Submit Type</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The following examples show how to implement own submit type rules.</p></div>
+<div class="sect2">
+<h3 id="_example_1_set_a_tt_cherry_pick_tt_submit_type_for_all_changes">Example 1: Set a <tt>Cherry Pick</tt> submit type for all changes</h3>
+<div class="paragraph"><p>This example sets the <tt>Cherry Pick</tt> submit type for all changes. It overrides
+whatever is set as project default submit type.</p></div>
+<div class="paragraph"><p>rules.pl</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_type(cherry_pick).</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_example_2_tt_fast_forward_only_tt_for_all_tt_refs_heads_stable_tt_branches">Example 2: <tt>Fast Forward Only</tt> for all <tt>refs/heads/stable*</tt> branches</h3>
+<div class="paragraph"><p>For all <tt>refs/heads/stable.*</tt> branches we would like to enforce the <tt>Fast
+Forward Only</tt> submit type. A reason for this decision may be a need to never
+break the build in the stable branches.  For all other branches, those not
+matching the <tt>refs/heads/stable.*</tt> pattern, we would like to use the project&#8217;s
+default submit type as defined on the project settings page.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_type(fast_forward_only) :-
+  gerrit:change_branch(B), regex_matches('refs/heads/stable.*', B),
+  !.
+submit_type(T) :- gerrit:project_default_submit_type(T)</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The first <tt>submit_type</tt> predicate defines the <tt>Fast Forward Only</tt> submit type
+for <tt>refs/heads/stable.*</tt> branches. The second <tt>submit_type</tt> predicate returns
+the project&#8217;s default submit type.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_example_3_don_8217_t_require_tt_fast_forward_only_tt_if_only_documentation_was_changed">Example 3: Don&#8217;t require <tt>Fast Forward Only</tt> if only documentation was changed</h3>
+<div class="paragraph"><p>Like in the previous example we want the <tt>Fast Forward Only</tt> submit type for
+the <tt>refs/heads/stable*</tt> branches.  However, if only documentation was changed
+(only <tt>*.txt</tt> files), then we allow project&#8217;s default submit type for such
+changes.</p></div>
+<div class="exampleblock">
+<div class="title">rules.pl</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>submit_type(fast_forward_only) :-
+  gerrit:commit_delta('(?&lt;!\.txt)$'),
+  gerrit:change_branch(B), regex_matches('refs/heads/stable.*', B),
+  !.
+submit_type(T) :- gerrit:project_default_submit_type(T)</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>The <tt>gerrit:commit_delta('(?&lt;!\.txt)$')</tt> succeeds if the change contains a file
+whose name doesn&#8217;t end with <tt>.txt</tt> The rest of this rule is same like in the
+previous example.</p></div>
+<div class="paragraph"><p>If all file names in the change end with <tt>.txt</tt>, then the
+<tt>gerrit:commit_delta('(?&lt;!\.txt)$')</tt> will fail as no file name will match this
+regular expression.</p></div>
+</div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2013-05-18 13:09:24 PDT
+</div>
+</div>
+</body>
+</html>

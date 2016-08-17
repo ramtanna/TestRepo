@@ -1,0 +1,1900 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Gerrit Code Review - /projects/ REST API</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Gerrit Code Review - /projects/ REST API</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>This page describes the project related REST endpoints.
+Please also take note of the general information on the
+<a href="rest-api.html">REST API</a>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_endpoints">Endpoints</h2>
+<div class="sectionbody">
+</div>
+</div>
+<div class="sect1">
+<h2 id="project-endpoints">Project Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="list-projects">List Projects</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Lists the projects accessible by the caller. This is the same as
+using the <a href="cmd-ls-projects.html">ls-projects</a> command over SSH,
+and accepts the same options as query parameters.</p></div>
+<div class="paragraph"><p>As result a map is returned that maps the project names to
+<a href="#project-info">ProjectInfo</a> entries. The entries in the map are sorted
+by project name.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/?d HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "external/bison": {
+      "kind": "gerritcodereview#project",
+      "id": "external%2Fbison",
+      "description": "GNU parser generator"
+    },
+    "external/gcc": {
+      "kind": "gerritcodereview#project",
+      "id": "external%2Fgcc",
+    },
+    "external/openssl": {
+      "kind": "gerritcodereview#project",
+      "id": "external%2Fopenssl",
+      "description": "encryption\ncrypto routines"
+    },
+    "test": {
+      "kind": "gerritcodereview#project",
+      "id": "test",
+      "description": "\u003chtml\u003e is escaped"
+    }
+  }</tt></pre>
+</div></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Get all projects with their description</div>
+<a id="/projects/?d" onmousedown="javascript:
+  var i =  document.URL.lastIndexOf('/Documentation/');
+  var url = document.URL.substring(0, i) + '/projects/?d';
+  document.getElementById('/projects/?d').href = url;">
+    GET /projects/?d HTTP/1.0
+</a>
+</div></div>
+<div class="paragraph" id="suggest-projects"><p>The <tt>/projects/</tt> URL also accepts a prefix string in the <tt>p</tt> parameter.
+This limits the results to those projects that start with the specified
+prefix.
+List all projects that start with <tt>platform/</tt>:</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/?p=platform%2F HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "platform/drivers": {
+      "kind": "gerritcodereview#project",
+      "id": "platform%2Fdrivers",
+    },
+    "platform/tools": {
+      "kind": "gerritcodereview#project",
+      "id": "platform%2Ftools",
+    }
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>E.g. this feature can be used by suggestion client UI&#8217;s to limit results.</p></div>
+</div>
+<div class="sect2">
+<h3 id="get-project">Get Project</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a project.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/plugins%2Freplication HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#project-info">ProjectInfo</a> entity is returned that
+describes the project.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#project",
+    "id": "plugins%2Freplication",
+    "name": "plugins/replication",
+    "parent": "Public-Plugins",
+    "description": "Copies to other servers using the Git protocol"
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="create-project">Create Project</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /projects/<a href="#project-name">{project-name}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Creates a new project.</p></div>
+<div class="paragraph"><p>In the request body additional data for the project can be provided as
+<a href="#project-input">ProjectInput</a>.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /projects/MyProject HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "description": "This is a demo project.",
+    "submit_type": "CHERRY_PICK",
+    "owners": [
+      "MyProject-Owners"
+    ]
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the <a href="#project-info">ProjectInfo</a> entity is returned that
+describes the created project.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 201 Created
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#project",
+    "id": "MyProject",
+    "name": "MyProject",
+    "parent": "All-Projects",
+    "description": "This is a demo project."
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-project-description">Get Project Description</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/description</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves the description of a project.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/plugins%2Freplication/description HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "Copies to other servers using the Git protocol"</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the project does not have a description an empty string is returned.</p></div>
+</div>
+<div class="sect2">
+<h3 id="set-project-description">Set Project Description</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /projects/<a href="#project-name">{project-name}</a>/description</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Sets the description of a project.</p></div>
+<div class="paragraph"><p>The new project description must be provided in the request body inside
+a <a href="#project-description-input">ProjectDescriptionInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /projects/plugins%2Freplication/description HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "description": "Plugin for Gerrit that handles the replication.",
+    "commit_message": "Update the project description"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the new project description is returned.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "Plugin for Gerrit that handles the replication."</tt></pre>
+</div></div>
+<div class="paragraph"><p>If the description was deleted the response is "<tt>204 No Content</tt>".</p></div>
+</div>
+<div class="sect2">
+<h3 id="delete-project-description">Delete Project Description</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /projects/<a href="#project-name">{project-name}</a>/description</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes the description of a project.</p></div>
+<div class="paragraph"><p>The request body does not need to include a
+<a href="#project-description-input">ProjectDescriptionInput</a> entity if no
+commit message is specified.</p></div>
+<div class="paragraph"><p>Please note that some proxies prohibit request bodies for DELETE
+requests. In this case, if you want to specify a commit message, use
+<a href="#set-project-description">PUT</a> to delete the description.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /projects/plugins%2Freplication/description HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-project-parent">Get Project Parent</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/parent</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves the name of a project&#8217;s parent project. For the
+<tt>All-Projects</tt> root project an empty string is returned.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/plugins%2Freplication/parent HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "All-Projects"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="set-project-parent">Set Project Parent</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /projects/<a href="#project-name">{project-name}</a>/parent</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Sets the parent project for a project.</p></div>
+<div class="paragraph"><p>The new name of the parent project must be provided in the request body
+inside a <a href="#project-parent-input">ProjectParentInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /projects/plugins%2Freplication/parent HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "parent": "Public-Plugins",
+    "commit_message": "Update the project parent"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the new parent project name is returned.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "Public-Plugins"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-head">Get HEAD</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/HEAD</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves for a project the name of the branch to which <tt>HEAD</tt> points.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/plugins%2Freplication/HEAD HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "refs/heads/master"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="set-head">Set HEAD</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /projects/<a href="#project-name">{project-name}</a>/HEAD</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Sets <tt>HEAD</tt> for a project.</p></div>
+<div class="paragraph"><p>The new ref to which <tt>HEAD</tt> should point must be provided in the
+request body inside a <a href="#head-input">HeadInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /projects/plugins%2Freplication/HEAD HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "ref": "refs/heads/stable"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the new ref to which <tt>HEAD</tt> points is returned.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  "refs/heads/stable"</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-repository-statistics">Get Repository Statistics</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/statistics.git</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Return statistics for the repository of a project.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/plugins%2Freplication/statistics.git HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>The repository statistics are returned as a
+<a href="#repository-statistics-info">RepositoryStatisticsInfo</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "number_of_loose_objects": 127,
+    "number_of_loose_refs": 15,
+    "number_of_pack_files": 15,
+    "number_of_packed_objects": 67,
+    "number_of_packed_refs": 0,
+    "size_of_loose_objects": 29466,
+    "size_of_packed_objects": 9646
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="run-gc">Run GC</h3>
+<div class="verseblock">
+<pre class="content"><em>POST /projects/<a href="#project-name">{project-name}</a>/gc</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Run the Git garbage collection for the repository of a project.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  POST /projects/plugins%2Freplication/gc HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>The response is the streamed output of the garbage collection.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: text/plain;charset=UTF-8
+
+  collecting garbage for "plugins/replication":
+  Pack refs:              100% (21/21)
+  Counting objects:       20
+  Finding sources:        100% (20/20)
+  Getting sizes:          100% (13/13)
+  Compressing objects:     83% (5/6)
+  Writing objects:        100% (20/20)
+  Selecting commits:      100% (7/7)
+  Building bitmaps:       100% (7/7)
+  Finding sources:        100% (41/41)
+  Getting sizes:          100% (25/25)
+  Compressing objects:     52% (12/23)
+  Writing objects:        100% (41/41)
+  Prune loose objects also found in pack files: 100% (36/36)
+  Prune loose, unreferenced objects: 100% (36/36)
+  done.</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dashboard-endpoints">Dashboard Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="list-dashboards">List Dashboards</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/dashboards/</em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>List custom dashboards for a project.</p></div>
+<div class="paragraph"><p>As result a list of <a href="#dashboard-info">DashboardInfo</a> entries is
+returned.</p></div>
+<div class="paragraph"><p>List all dashboards for the <tt>work/my-project</tt> project:</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/work%2Fmy-project/dashboards/ HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  [
+    {
+      "kind": "gerritcodereview#dashboard",
+      "id": "main:closed",
+      "ref": "main",
+      "path": "closed",
+      "description": "Merged and abandoned changes in last 7 weeks",
+      "url": "/dashboard/?title\u003dClosed+changes\u0026Merged\u003dstatus:merged+age:7w\u0026Abandoned\u003dstatus:abandoned+age:7w",
+      "default": true,
+      "title": "Closed changes",
+      "sections": [
+        {
+          "name": "Merged",
+          "query": "status:merged age:7w"
+        },
+        {
+          "name": "Abandoned",
+          "query": "status:abandoned age:7w"
+        }
+      ]
+    }
+  ]</tt></pre>
+</div></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Get all dashboards of the <em>All-Projects</em> project</div>
+<a id="/projects/All-Projects/dashboards/" onmousedown="javascript:
+  var i =  document.URL.lastIndexOf('/Documentation/');
+  var url = document.URL.substring(0, i) + '/projects/All-Projects/dashboards/';
+  document.getElementById('/projects/All-Projects/dashboards/').href = url;">
+    GET /projects/All-Projects/dashboards/ HTTP/1.0
+</a>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="get-dashboard">Get Dashboard</h3>
+<div class="verseblock">
+<pre class="content"><em>GET /projects/<a href="#project-name">{project-name}</a>/dashboards/<a href="#dashboard-id">{dashboard-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Retrieves a project dashboard. The dashboard can be defined on that
+project or be inherited from a parent project.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/work%2Fmy-project/dashboards/main:closed HTTP/1.0</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response a <a href="#dashboard-info">DashboardInfo</a> entity is returned
+that describes the dashboard.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#dashboard",
+    "id": "main:closed",
+    "ref": "main",
+    "path": "closed",
+    "description": "Merged and abandoned changes in last 7 weeks",
+    "url": "/dashboard/?title\u003dClosed+changes\u0026Merged\u003dstatus:merged+age:7w\u0026Abandoned\u003dstatus:abandoned+age:7w",
+    "default": true,
+    "title": "Closed changes",
+    "sections": [
+      {
+        "name": "Merged",
+        "query": "status:merged age:7w"
+      },
+      {
+        "name": "Abandoned",
+        "query": "status:abandoned age:7w"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>To retrieve the default dashboard of a project use <tt>default</tt> as
+dashboard-id.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  GET /projects/work%2Fmy-project/dashboards/default HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#dashboard",
+    "id": "main:closed",
+    "ref": "main",
+    "path": "closed",
+    "description": "Merged and abandoned changes in last 7 weeks",
+    "url": "/dashboard/?title\u003dClosed+changes\u0026Merged\u003dstatus:merged+age:7w\u0026Abandoned\u003dstatus:abandoned+age:7w",
+    "default": true,
+    "title": "Closed changes",
+    "sections": [
+      {
+        "name": "Merged",
+        "query": "status:merged age:7w"
+      },
+      {
+        "name": "Abandoned",
+        "query": "status:abandoned age:7w"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="set-dashboard">Set Dashboard</h3>
+<div class="verseblock">
+<pre class="content"><em>PUT /projects/<a href="#project-name">{project-name}</a>/dashboards/<a href="#dashboard-id">{dashboard-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Updates/Creates a project dashboard.</p></div>
+<div class="paragraph"><p>Currently only supported for the <tt>default</tt> dashboard.</p></div>
+<div class="paragraph"><p>The creation/update information for the dashboard must be provided in
+the request body as a <a href="#dashboard-input">DashboardInput</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  PUT /projects/work%2Fmy-project/dashboards/default HTTP/1.0
+  Content-Type: application/json;charset=UTF-8
+
+  {
+    "id": "main:closed",
+    "commit_message": "Define the default dashboard"
+  }</tt></pre>
+</div></div>
+<div class="paragraph"><p>As response the new/updated dashboard is returned as a
+<a href="#dashboard-info">DashboardInfo</a> entity.</p></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 200 OK
+  Content-Disposition: attachment
+  Content-Type: application/json;charset=UTF-8
+
+  )]}'
+  {
+    "kind": "gerritcodereview#dashboard",
+    "id": "main:closed",
+    "ref": "main",
+    "path": "closed",
+    "description": "Merged and abandoned changes in last 7 weeks",
+    "url": "/dashboard/?title\u003dClosed+changes\u0026Merged\u003dstatus:merged+age:7w\u0026Abandoned\u003dstatus:abandoned+age:7w",
+    "default": true,
+    "title": "Closed changes",
+    "sections": [
+      {
+        "name": "Merged",
+        "query": "status:merged age:7w"
+      },
+      {
+        "name": "Abandoned",
+        "query": "status:abandoned age:7w"
+      }
+    ]
+  }</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="delete-dashboard">Delete Dashboard</h3>
+<div class="verseblock">
+<pre class="content"><em>DELETE /projects/<a href="#project-name">{project-name}</a>/dashboards/<a href="#dashboard-id">{dashboard-id}</a></em></pre>
+<div class="attribution">
+</div></div>
+<div class="paragraph"><p>Deletes a project dashboard.</p></div>
+<div class="paragraph"><p>Currently only supported for the <tt>default</tt> dashboard.</p></div>
+<div class="paragraph"><p>The request body does not need to include a <a href="#dashboard-input">
+DashboardInput</a> entity if no commit message is specified.</p></div>
+<div class="paragraph"><p>Please note that some proxies prohibit request bodies for DELETE
+requests.</p></div>
+<div class="listingblock">
+<div class="title">Request</div>
+<div class="content">
+<pre><tt>  DELETE /projects/work%2Fmy-project/dashboards/default HTTP/1.0</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title">Response</div>
+<div class="content">
+<pre><tt>  HTTP/1.1 204 No Content</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ids">IDs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="dashboard-id">{dashboard-id}</h3>
+<div class="paragraph"><p>The ID of a dashboard in the format <em>&lt;ref&gt;:&lt;path&gt;</em>.</p></div>
+<div class="paragraph"><p>A special dashboard ID is <tt>default</tt> which represents the default
+dashboard of a project.</p></div>
+</div>
+<div class="sect2">
+<h3 id="project-name">{project-name}</h3>
+<div class="paragraph"><p>The name of the project.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="json-entities">JSON Entities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="dashboard-info">DashboardInfo</h3>
+<div class="paragraph"><p>The <tt>DashboardInfo</tt> entity contains information about a project
+dashboard.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name        </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table"><tt>gerritcodereview#dashboard</tt></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The ID of the dashboard. The ID has the format <em>&lt;ref&gt;:&lt;path&gt;</em>,
+where ref and path are URL encoded.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>project</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the project for which this dashboard is returned.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>defining_project</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the project in which this dashboard is defined.
+This is different from <tt>project</tt> if the dashboard is inherited from a
+parent project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>ref</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the ref in which the dashboard is defined, without the
+<tt>refs/meta/dashboards/</tt> prefix, which is common for all dashboard refs.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>path</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The path of the file in which the dashboard is defined.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>description</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The description of the dashboard.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>foreach</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Subquery that applies to all sections in the dashboard.<br />
+Tokens such as <tt>${project}</tt> are not resolved.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>url</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The URL under which the dashboard can be opened in the Gerrit WebUI.<br />
+The URL is relative to the canonical web URL.<br />
+Tokens in the queries such as <tt>${project}</tt> are resolved.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>default</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if <tt>false</tt></p></td>
+<td align="left" valign="top"><p class="table">Whether this is the default dashboard of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>title</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The title of the dashboard.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>sections</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The list of <a href="#dashboard-section-info">sections</a> in the dashboard.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dashboard-input">DashboardInput</h3>
+<div class="paragraph"><p>The <tt>DashboardInput</tt> entity contains information to create/update a
+project dashboard.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">URL encoded ID of a dashboard to which this dashboard should link to.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>commit_message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message that should be used to commit the change of the dashboard.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dashboard-section-info">DashboardSectionInfo</h3>
+<div class="paragraph"><p>The <tt>DashboardSectionInfo</tt> entity contains information about a section
+in a dashboard.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>name</tt></p></td>
+<td align="left" valign="top"><p class="table">The title of the section.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>query</tt></p></td>
+<td align="left" valign="top"><p class="table">The query of the section.<br />
+Tokens such as <tt>${project}</tt> are not resolved.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="head-input">HeadInput</h3>
+<div class="paragraph"><p>The <tt>HeadInput</tt> entity contains information for setting <tt>HEAD</tt> for a
+project.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>ref</tt></p></td>
+<td align="left" valign="top"><p class="table">The ref to which <tt>HEAD</tt> should be set, the <tt>refs/heads</tt> prefix can be
+omitted.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="project-description-input">ProjectDescriptionInput</h3>
+<div class="paragraph"><p>The <tt>ProjectDescriptionInput</tt> entity contains information for setting a
+project description.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>description</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The project description.<br />
+The project description will be deleted if not set.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>commit_message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message that should be used to commit the change of the project
+description in the <tt>project.config</tt> file to the <tt>refs/meta/config</tt>
+branch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="project-info">ProjectInfo</h3>
+<div class="paragraph"><p>The <tt>ProjectInfo</tt> entity contains information about a project.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name    </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>kind</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table"><tt>gerritcodereview#project</tt></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>id</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The URL encoded project name.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>name</tt></p></td>
+<td align="center" valign="top"><p class="table">not set if returned in a map where the project name is used as map key</p></td>
+<td align="left" valign="top"><p class="table">The name of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>parent</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The name of the parent project.<br />
+<tt>?-&lt;n&gt;</tt> if the parent project is not visible (<tt>&lt;n&gt;</tt> is a number which
+is increased for each non-visible project).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>description</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The description of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>branches</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Map of branch names to HEAD revisions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="project-input">ProjectInput</h3>
+<div class="paragraph"><p>The <tt>ProjectInput</tt> entity contains information for the creation of
+a new project.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name                  </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>name</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The name of the project (not encoded).<br />
+If set, must match the project name in the URL.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>parent</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The name of the parent project.<br />
+If not set, the <tt>All-Projects</tt> project will be the parent project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>description</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The description of the project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>permissions_only</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>false</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether a permission-only project should be created.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>create_empty_commit</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>false</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether an empty initial commit should be created.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>submit_type</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">The submit type that should be set for the project
+(<tt>MERGE_IF_NECESSARY</tt>, <tt>REBASE_IF_NECESSARY</tt>, <tt>FAST_FORWARD_ONLY</tt>,
+<tt>MERGE_ALWAYS</tt>, <tt>CHERRY_PICK</tt>).<br />
+If not set, <tt>MERGE_IF_NECESSARY</tt> is set as submit type.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>branches</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">A list of branches that should be initially created.<br />
+For the branch names the <tt>refs/heads/</tt> prefix can be omitted.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>owners</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">A list of groups that should be assigned as project owner.<br />
+Each group in the list must be specified as
+<a href="rest-api-groups.html#group-id">group-id</a>.<br />
+If not set, the <a href="config-gerrit.html#repository.name.ownerGroup">
+groups that are configured as default owners</a> are set as project
+owners.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>use_contributor_agreements</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>INHERIT</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether contributor agreements should be used for the project  (<tt>TRUE</tt>,
+<tt>FALSE</tt>, <tt>INHERIT</tt>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>use_signed_off_by</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>INHERIT</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether the usage of <em>Signed-Off-By</em> footers is required for the
+project (<tt>TRUE</tt>, <tt>FALSE</tt>, <tt>INHERIT</tt>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>use_content_merge</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>INHERIT</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether content merge should be enabled for the project (<tt>TRUE</tt>,
+<tt>FALSE</tt>, <tt>INHERIT</tt>).<br />
+<tt>FALSE</tt>, if the <tt>submit_type</tt> is <tt>FAST_FORWARD_ONLY</tt>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>require_change_id</tt></p></td>
+<td align="center" valign="top"><p class="table"><tt>INHERIT</tt> if not set</p></td>
+<td align="left" valign="top"><p class="table">Whether the usage of Change-Ids is required for the project (<tt>TRUE</tt>,
+<tt>FALSE</tt>, <tt>INHERIT</tt>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="project-parent-input">ProjectParentInput</h3>
+<div class="paragraph"><p>The <tt>ProjectParentInput</tt> entity contains information for setting a
+project parent.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="28%" />
+<col width="57%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name      </th>
+<th align="center" valign="top"></th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>parent</tt></p></td>
+<td align="center" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">The name of the parent project.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>commit_message</tt></p></td>
+<td align="center" valign="top"><p class="table">optional</p></td>
+<td align="left" valign="top"><p class="table">Message that should be used to commit the change of the project parent
+in the <tt>project.config</tt> file to the <tt>refs/meta/config</tt> branch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repository-statistics-info">RepositoryStatisticsInfo</h3>
+<div class="paragraph"><p>The <tt>RepositoryStatisticsInfo</tt> entity contains information about
+statistics of a Git repository.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="50%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="14%" />
+<col width="85%" />
+<thead>
+<tr>
+<th align="left" valign="top">Field Name                </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>number_of_loose_objects</tt></p></td>
+<td align="left" valign="top"><p class="table">Number of loose objects.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>number_of_loose_refs</tt></p></td>
+<td align="left" valign="top"><p class="table">Number of loose refs.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>number_of_pack_files</tt></p></td>
+<td align="left" valign="top"><p class="table">Number of pack files.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>number_of_packed_objects</tt></p></td>
+<td align="left" valign="top"><p class="table">Number of packed objects.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>number_of_packed_refs</tt></p></td>
+<td align="left" valign="top"><p class="table">Number of packed refs.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>size_of_loose_objects</tt></p></td>
+<td align="left" valign="top"><p class="table">Size of loose objects in bytes.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><tt>size_of_packed_objects</tt></p></td>
+<td align="left" valign="top"><p class="table">Size of packed objects in bytes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2013-06-10 12:17:19 PDT
+</div>
+</div>
+</body>
+</html>

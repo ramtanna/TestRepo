@@ -1,0 +1,1013 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Gerrit Code Review - Contact Information</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Gerrit Code Review - Contact Information</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>To help ensure contributor privacy, but still support gathering of
+contributor agreements as necessary, Gerrit encrypts all offline
+contact information gathered from users.  This data is shipped to
+another server, typically at a different location, to make it more
+difficult for an attacker to obtain.</p></div>
+<div class="paragraph"><p>This feature is optional.  If the crypto APIs aren&#8217;t installed
+and the <tt>contactstore.url</tt> setting in <tt>gerrit.config</tt> is not set,
+Gerrit will not collect contact information from users.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup">Setup</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Ensure Bouncy Castle Crypto API is available in the web application&#8217;s
+CLASSPATH (e.g. in <tt>'JETTY_HOME'/lib/plus</tt> for Jetty).  Gerrit needs
+both <tt>bcprov-jdk\*-*.jar</tt> and <tt>bcpg-jdk\*-*.jar</tt> to be provided
+for the contact encryption to work.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="http://www.bouncycastle.org/latest_releases.html">Bouncy Castle Crypto API</a>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Ensure a proper JCE policy file is installed.  By default most
+JRE installations forbid the use of a strong key, resulting in
+SecurityException messages when trying to encrypt the contact data.
+You need to obtain a strong JCE policy file and install it by hand.
+Look for the <em>Unlimited Strength Jurisdiction Policy</em> download.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="http://java.sun.com/javase/downloads/index.jsp">Java SE Downloads</a>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Create a public/private key pair for contact data handling.
+Generate the keys on a protected system, where the resulting
+private key is unlikely to fall into the wrong hands.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>gpg --gen-key</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Select to use a <tt>DSA and Elgamal</tt> key type, as the public key will
+be used for data encryption.</p></div>
+<div class="paragraph"><p>The information chosen for name, email and comment fields can be
+anything reasonable which would identify the contact store of this
+Gerrit instance.  It is probably a good idea to not use a real
+person&#8217;s name here, but instead some sort of organizational role.
+The actual values chosen don&#8217;t matter later, and are only to help
+document the purpose of the key.</p></div>
+<div class="paragraph"><p>Choose a fairly long expiration period, such as 20 years.  For most
+Gerrit instances, contact data will be written once, and rarely,
+if ever, read back.</p></div>
+<div class="paragraph"><p>Export the public key for Gerrit to use during encryption.  The
+public key must be stored in a file called <tt>contact_information.pub</tt>
+and reside inside of the <tt>site_config</tt> directory.  Armoring it
+during export makes it easier to transport between systems, as
+you can easily copy-and-paste the text.  Gerrit can read both the
+armored and unarmored formats.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>gpg --export --armor KEYEMAIL &gt;$site_path/etc/contact_information.pub</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>Consider storing the private key with some sort of key escrow
+service within your organization.  Without the private key it
+is impossible to recover contact records.</p></div>
+<div class="paragraph"><p>Install a contact store implementation somewhere to receive
+the contact records.  To be really paranoid, Gerrit always
+ships the data to another HTTP server, preferably over HTTPS.
+Existing open-source server implementations can be found in the
+gerrit-contactstore project.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="https://code.google.com/p/gerrit/source/checkout?repo=contactstore">gerrit-contactstore</a>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Configure <tt>'$site_path'/etc/gerrit.config</tt> with the contact store&#8217;s
+URL (in <tt>contactstore.url</tt>), and if needed, APPSEC value (in
+<tt>contactstore.appsec</tt>):</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git config --file $site_path/etc/gerrit.config appsec.url https://...
+git config --file $site_path/etc/gerrit.config appsec.appsec sekret</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contact_store_protocol">Contact Store Protocol</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>To implement a new contact store, the following details are useful.</p></div>
+<div class="paragraph"><p>Gerrit connects to the contact store by sending a standard
+<tt>application/x-www-form-urlencoded</tt> within an HTTP POST request
+sent to the store URL (the exact URL that is in contactstore.url)
+with the following form fields in the body:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+APPSEC
+</p>
+<div class="paragraph"><p>A shared secret "password" that should be known only to Gerrit
+and the contact store.  The contact store should test this value to
+deter spamming of the contact store by outside parties.  Gerrit reads
+this from contactstore.appsec.</p></div>
+</li>
+<li>
+<p>
+account_id
+</p>
+<div class="paragraph"><p>Unique account_id value from the Gerrit database for the account
+the contact information belongs to.  Base 10 integer.</p></div>
+</li>
+<li>
+<p>
+email
+</p>
+<div class="paragraph"><p>Preferred email address of the account.  May facilitate lookups in
+the contact store at a future date.  May be omitted or the empty
+string if the user hasn&#8217;t chosen a preferred email.</p></div>
+</li>
+<li>
+<p>
+filed
+</p>
+<div class="paragraph"><p>Seconds since the UNIX epoch of when the contact information
+was filed.  May be omitted or the empty string if Gerrit
+doesn&#8217;t think the supplied contact information is valid enough.</p></div>
+</li>
+<li>
+<p>
+data
+</p>
+<div class="paragraph"><p>Encrypted account data as an armored ASCII blob.  This is usually
+several KB of text data as a single string, with embedded newlines
+to break the lines at about 70-75 characters per line.  Data can
+be decoded using GnuPG with the correct private key.</p></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>Upon successful store, the contact store application should respond
+with HTTP status code <tt>200</tt> and a body consisting only of <tt>OK</tt>
+(or <tt>OK\n</tt>).  Any other response code or body is considered to be
+a failure by Gerrit.</p></div>
+<div class="paragraph"><p>Using <tt>https://</tt> for the store URL is <strong>highly</strong> encouraged, as it
+prevents man-in-the-middle attacks from reading the shared secret
+APPSEC token, or messing with the data field.</p></div>
+<div class="sect2">
+<h3 id="_data_format">Data Format</h3>
+<div class="paragraph"><p>Once decrypted the <tt>data</tt> field looks something like the following:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Account-Id: 1001240
+Date: 2009-02-23 20:32:32.852 UTC
+Full-Name: John Doe
+Preferred-Email: jdoe@example.com
+Identity: jd15@some-isp.com
+Identity: jdoe@example.com &lt;https://www.google.com/accounts/o8/id?id=AIt18axxafvda821aQZaHDF1k8akbalk218sak&gt;
+Identity: jdoe@example.com &lt;http://jdoe.blogger.com/&gt;
+Address:
+        123 Any Street
+        Any Town, Somewhere
+Country: USA
+Phone-Number: +1 (555) 555-1212
+Fax-Number: 555.1200</tt></pre>
+</div></div>
+<div class="paragraph"><p>The fields are as follows:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>Account-Id</tt>
+</p>
+<div class="paragraph"><p>Value of the <tt>account_id</tt> field in the metadata database.  This is
+a unique key for this account, and links all data records to it.</p></div>
+</li>
+<li>
+<p>
+<tt>Date</tt>
+</p>
+<div class="paragraph"><p>Date and time of when this contact record was submitted by the user.
+Written in an ISO formatted date/time string (<tt>YYYY-MM-DD hh:mm:ss</tt>),
+in the UTC timezone.</p></div>
+</li>
+<li>
+<p>
+<tt>Full-Name</tt>
+</p>
+<div class="paragraph"><p>The <tt>full_name</tt> field of the account record when the user submitted
+the contact information.  This should be the user&#8217;s given name and
+family name.</p></div>
+</li>
+<li>
+<p>
+<tt>Preferred-Email</tt>
+</p>
+<div class="paragraph"><p>The <tt>preferred_email</tt> field of the account record when the user
+submitted the contact information.  This should be one of the emails
+listed in the <tt>Identity</tt> field.</p></div>
+</li>
+<li>
+<p>
+<tt>Identity</tt>
+</p>
+<div class="paragraph"><p>This field occurs once for each <tt>account_external_id</tt> record
+in the database for this account.  The email address is listed,
+and if the user is using OpenID authentication, the OpenID claimed
+identity follows in brackets (<tt>&lt;...&gt;</tt>).  Identity lines without an
+OpenID identity are usually created by sending an email containing
+a unique hyperlink that the user must visit to setup the identity.</p></div>
+</li>
+<li>
+<p>
+<tt>Address</tt>
+</p>
+<div class="paragraph"><p>Free form text, as entered by the user.  This should describe some
+location that physical documents could be sent to, but it is not
+verified, so users can enter pretty much anything here.  Each line
+is prefixed with a single TAB character, but is otherwise exactly
+as entered.</p></div>
+</li>
+<li>
+<p>
+<tt>Country</tt>
+</p>
+<div class="paragraph"><p>Free form text, as entered by the user.  This should be some sort
+of country name or ISO country abbreviation, but it is not verified,
+so it can be pretty much anything.</p></div>
+</li>
+<li>
+<p>
+<tt>Phone-Number</tt>, <tt>Fax-Number</tt>
+</p>
+<div class="paragraph"><p>Free form text, as entered by the user.  The format here can be
+anything, and as the example shows, may not even be consistent in
+the same record.</p></div>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2012-12-05 11:09:09 PST
+</div>
+</div>
+</body>
+</html>

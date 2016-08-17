@@ -1,0 +1,1422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+<title>Making a Gerrit Release</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Making a Gerrit Release</h1>
+<span id="revnumber">version 2.6-rc4</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>This document is meant primarily for Gerrit maintainers
+who have been given approval and submit status to the Gerrit
+projects.  Additionally, maintainers should be given owner
+status to the Gerrit web site.</p></div>
+</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>To make a Gerrit release involves a great deal of complex
+tasks and it is easy to miss a step so this document should
+hopefully serve as both a how to for those new to the process
+and as a checklist for those already familiar with these
+tasks.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gerrit_release_type">Gerrit Release Type</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Here are some guidelines on release approaches depending on the
+type of release you want to make (<tt>stable-fix</tt>, <tt>stable</tt>, <tt>RC0</tt>,
+<tt>RC1</tt>&#8230;).</p></div>
+<div class="sect2">
+<h3 id="stable">Stable</h3>
+<div class="paragraph"><p>A <tt>stable</tt> release is generally built from the <tt>master</tt> branch and may
+need to undergo some stabilization before releasing the final release.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Propose the release with any plans/objectives to the mailing list
+</p>
+</li>
+<li>
+<p>
+Create a Gerrit <tt>RC0</tt>
+</p>
+</li>
+<li>
+<p>
+If needed create a Gerrit <tt>RC1</tt>
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>You may let in a few features to this release</p></div>
+</td>
+</tr></table>
+</div>
+<div class="ulist"><ul>
+<li>
+<p>
+If needed create a Gerrit <tt>RC2</tt>
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>There should be no new features in this release, only bug fixes</p></div>
+</td>
+</tr></table>
+</div>
+<div class="ulist"><ul>
+<li>
+<p>
+Finally create the <tt>stable</tt> release (no <tt>RC</tt>)
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_stable_fix">Stable-Fix</h3>
+<div class="paragraph"><p><tt>stable-fix</tt> releases should likely only contain bug fixes and doc
+updates.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Propose the release with any plans/objectives to the mailing list
+</p>
+</li>
+<li>
+<p>
+This type of release does not need any RCs, release when the
+objectives are met
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="security">Security-Fix</h3>
+<div class="paragraph"><p><tt>security-fix</tt> releases should only contain bug fixes for security
+issues.</p></div>
+<div class="paragraph"><p>For security issues it is important that they are only announced
+<strong>after</strong> fixed versions for all relevant releases have been published.
+Because of this, <tt>security-fix</tt> releases can&#8217;t be prepared in the public
+<tt>gerrit</tt> project.</p></div>
+<div class="paragraph"><p><tt>security-fix</tt> releases are prepared in the <tt>gerrit-security-fixes</tt>
+project which is only readable by the Gerrit Maintainers. Only after
+a <tt>security-fix</tt> release has been published will the commits/tags made in
+the <tt>gerrit-security-fixes</tt> project be taken over into the public
+<tt>gerrit</tt> project.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_actual_release">Create the Actual Release</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>To create a Gerrit release the following steps have to be done:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+<a href="#subproject">Release Subprojects</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#prepare-gerrit">Prepare the Gerrit Release</a>
+</p>
+<div class="olist loweralpha"><ol class="loweralpha">
+<li>
+<p>
+<a href="#prepare-war-and-plugin-api">Prepare the Gerrit WAR and the Plugin API Jar</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#prepare-core-plugins">Prepare the Core Plugins</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#prepare-war-with-plugins">Prepare Gerrit WAR with Core Plugins</a>
+</p>
+</li>
+</ol></div>
+</li>
+<li>
+<p>
+<a href="#publish-gerrit">Publish the Gerrit Release</a>
+</p>
+<div class="olist loweralpha"><ol class="loweralpha">
+<li>
+<p>
+<a href="#extension-and-plugin-api">Publish the Extension and Plugin API Jars</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#publish-core-plugins">Publish the Core Plugins</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#publish-gerrit-war">Publish the Gerrit WAR (with Core Plugins)</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#push-stable">Push the Stable Branch</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#push-tag">Push the Release Tag</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#upload-documentation">Upload the Documentation</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#update-issues">Update the Issues</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#announce">Announce on Mailing List</a>
+</p>
+</li>
+</ol></div>
+</li>
+<li>
+<p>
+<a href="#increase-version">Increase Gerrit Version for Current Development</a>
+</p>
+</li>
+<li>
+<p>
+<a href="#merge-stable">Merge <tt>stable</tt> into <tt>master</tt></a>
+</p>
+</li>
+</ol></div>
+<div class="sect2">
+<h3 id="subproject">Release Subprojects</h3>
+<div class="paragraph"><p>The subprojects to be released are:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<tt>gwtexpui</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>gwtjsonrpc</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>gwtorm</tt>
+</p>
+</li>
+<li>
+<p>
+<tt>prolog-cafe</tt>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>For each subproject do:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Check the dependency to the Subproject in the Gerrit parent <tt>pom.xml</tt>:
+</p>
+<div class="paragraph"><p>If a <tt>SNAPSHOT</tt> version of the subproject is referenced the subproject
+needs to be released so that Gerrit can reference a released version of
+the subproject.</p></div>
+</li>
+<li>
+<p>
+<a href="dev-release-subproject.html#make-snapshot">Make a snapshot and test it</a>
+</p>
+</li>
+<li>
+<p>
+<a href="dev-release-subproject.html#prepare-release">Prepare the Release</a>
+</p>
+</li>
+<li>
+<p>
+<a href="dev-release-subproject.html#publish-release">Publish the Release</a>
+</p>
+</li>
+<li>
+<p>
+Update the version of the Subproject in the Gerrit parent <tt>pom.xml</tt>
+to the released version
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="build-gerrit">Build Gerrit</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Build the Gerrit WAR
+</p>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>rm -f ~/.m2/settings.xml
+./tools/release.sh</tt></pre>
+</div></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>Make sure you are compiling the release for all browsers. Check in your
+Maven <tt>~/.m2/settings.xml</tt> file that no Maven profile is active that
+limits the compilation to a certain browser.</p></div>
+</td>
+</tr></table>
+</div>
+</li>
+<li>
+<p>
+Sanity check WAR
+</p>
+</li>
+<li>
+<p>
+Test the new Gerrit version
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="publish-gerrit">Publish the Gerrit Release</h3>
+<div class="sect3">
+<h4 id="extension-and-plugin-api">Publish the Extension and Plugin API Jars</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+Make sure you have done the
+<a href="dev-release-deploy-config.html#deploy-configuration-settings-xml">
+configuration needed for deployment</a>
+</p>
+</li>
+<li>
+<p>
+Push the Jars to <tt>commondatastorage.googleapis.com</tt>:
+</p>
+<div class="listingblock">
+<div class="content">
+<pre><tt>  ./tools/deploy_api.sh</tt></pre>
+</div></div>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="publish-core-plugins">Publish the Core Plugins</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="dev-release-subproject.html#publish-release">Publish the Release</a>
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="publish-gerrit-war">Publish the Gerrit WAR (with Core Plugins)</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+The WAR file to upload is <tt>gerrit-package-plugins\target\gerrit-full-v2.5.war</tt>
+</p>
+</li>
+<li>
+<p>
+Upload WAR to <tt>code.google.com/p/gerrit</tt> (manual via web browser)
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Go to <a href="http://code.google.com/p/gerrit/downloads/list">http://code.google.com/p/gerrit/downloads/list</a>
+</p>
+</li>
+<li>
+<p>
+Use the <tt>New Download</tt> button
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Update labels:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+new war: [<tt>release-candidate</tt>], <tt>featured</tt>&#8230;
+</p>
+</li>
+<li>
+<p>
+old war: <tt>deprecated</tt>
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="push-stable">Push the Stable Branch</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+create the stable branch <tt>stable-2.5</tt> in the <tt>gerrit</tt> project
+</p>
+<div class="paragraph"><p>Via the <a href="https://gerrit-review.googlesource.com/#/admin/projects/gerrit,branches">
+Gerrit WebUI</a> or by push.</p></div>
+</li>
+<li>
+<p>
+Push the commits done on <tt>stable-2.5</tt> to <tt>refs/for/stable-2.5</tt> and
+get them merged
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="push-tag">Push the Release Tag</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+Push the new Release Tag
+</p>
+<div class="paragraph"><p>For an <tt>RC</tt>:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push gerrit-review refs/tags/v2.5-rc0:refs/tags/v2.5-rc0</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>For a final <tt>stable</tt> release:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git push gerrit-review refs/tags/v2.5:refs/tags/v2.5</tt></pre>
+</div></div>
+</div></div>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="upload-documentation">Upload the Documentation</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>make -C Documentation PRIOR=2.4 update
+make -C ReleaseNotes update</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>(no <tt>PRIOR=</tt>&#8230; if updating the same release again during RCs)</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Update Google Code project links
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Go to <a href="http://code.google.com/p/gerrit/admin">http://code.google.com/p/gerrit/admin</a>
+</p>
+</li>
+<li>
+<p>
+Point the main page to the new docs. The link to the documentation has to be
+updated at two places: in the project description and also in the <tt>Links</tt>
+section.
+</p>
+</li>
+<li>
+<p>
+Point the main page to the new release notes
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>The docs makefile does an <tt>svn cp</tt> of the prior revision of the docs to
+branch the docs so you have less to upload on the new docs.</p></div>
+<div class="paragraph"><p>User and password from here:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>https://code.google.com/hosting/settings</tt></pre>
+</div></div>
+<div class="paragraph"><p>If subversion assumes a different username than your google one and asks for a
+password right away simply hit enter. Subversion will fail and then ask for
+another username and password. This time enter the username and password from
+the page linked above. After that subversion should save the username/password
+somewhere under <tt>~/.subversion/auth</tt> folder.</p></div>
+</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="update-issues">Update the Issues</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>How do the issues get updated?  Do you run a script to do
+this?  When do you do it, after the final 2.5 is released?</tt></pre>
+</div></div>
+</div></div>
+<div class="paragraph"><p>By hand.</p></div>
+<div class="paragraph"><p>Our current process is an issue should be updated to say <tt>Status =
+Submitted, FixedIn-2.5</tt> once the change is submitted, but before the
+release.</p></div>
+<div class="paragraph"><p>After the release is actually made, you can search in Google Code for
+&#8220;Status=Submitted FixedIn=2.5&#8221; and then batch update these changes
+to say <tt>Status=Released</tt>. Make sure the pulldown says &#8220;All Issues&#8221;
+because <tt>Status=Submitted</tt> is considered a closed issue.</p></div>
+</div>
+<div class="sect3">
+<h4 id="announce">Announce on Mailing List</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+Send an email to the mailing list to announce the release, consider
+including some or all of the following in the email:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+A link to the release and the release notes (if a final release)
+</p>
+</li>
+<li>
+<p>
+A link to the docs
+</p>
+</li>
+<li>
+<p>
+Describe the type of release (stable, bug fix, RC)
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>To: Repo and Gerrit Discussion &lt;repo-discuss@googlegroups.com&gt;
+Subject: Announce: Gerrit 2.2.2.1  (Stable bug fix update)
+
+I am pleased to announce Gerrit Code Review 2.2.2.1.
+
+Download:
+
+  http://code.google.com/p/gerrit/downloads/list
+
+
+This release is a stable bug fix release with some
+documentation updates including a new "Contributing to
+Gerrit" doc:
+
+  http://gerrit-documentation.googlecode.com/svn/Documentation/2.2.2/dev-contributing.html
+
+
+To read more about the bug fixes:
+
+  http://gerrit-documentation.googlecode.com/svn/ReleaseNotes/ReleaseNotes-2.2.2.1.html
+
+-Martin</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Add an entry to the <tt>NEWS</tt> section of the main Gerrit project web page
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Go to: <a href="http://code.google.com/p/gerrit/admin">http://code.google.com/p/gerrit/admin</a>
+</p>
+</li>
+<li>
+<p>
+Add entry like:
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> * Jun 14, 2012 - Gerrit 2.4.1 [https://groups.google.com/d/topic/repo-discuss/jHg43gixqzs/discussion Released]</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Update the new discussion group announcement to be sticky
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Go to: <a href="http://groups.google.com/group/repo-discuss/topics">http://groups.google.com/group/repo-discuss/topics</a>
+</p>
+</li>
+<li>
+<p>
+Click on the announcement thread
+</p>
+</li>
+<li>
+<p>
+Near the top right, click on options
+</p>
+</li>
+<li>
+<p>
+Under options, click the "Display this top first" checkbox
+</p>
+</li>
+<li>
+<p>
+and Save
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Update the previous discussion group announcement to no longer be sticky
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+See above (unclick checkbox)
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="increase-version">Increase Gerrit Version for Current Development</h3>
+<div class="paragraph"><p>All new development that is done in the <tt>master</tt> branch will be
+included in the next Gerrit release. Update the Gerrit version in each
+<tt>pom.xml</tt> file to the next `SNAPSHOT`version. Push the change for
+review and get it merged.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>tools/version.sh --snapshot=2.6</tt></pre>
+</div></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="merge-stable">Merge <tt>stable</tt> into <tt>master</tt></h3>
+<div class="paragraph"><p>After every release, stable should be merged to master to ensure that
+none of the changes/fixes ever get lost.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><tt>git config merge.summary true
+git checkout master
+git reset --hard origin/master
+git branch -f stable origin/stable
+git merge stable</tt></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+</div>
+<hr style="
+  height: 2px;
+  color: silver;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+">
+<div class="paragraph"><p>Part of <a href="index.html">Gerrit Code Review</a></p></div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Version 2.6-rc4<br />
+Last updated 2013-06-10 12:17:19 PDT
+</div>
+</div>
+</body>
+</html>

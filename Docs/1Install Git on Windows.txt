@@ -1,0 +1,16 @@
+1.Execute the git exe file.
+2.Open Git Bash
+3.The git config command lets you configure your Git installation (or an individual repository) from the command line. This command can define everything from user info to preferences to the behavior of a repository.
+Configure your Git username and email using the following commands
+	git config --global user.name "<firstname lastname>"
+	git config --global user.email "<emailid>"
+
+
+
+Note #
+Git stores configuration options in three separate files, which lets you scope options to individual repositories, users, or the entire system:
+
+<repo>/.git/config – Repository-specific settings.
+~/.gitconfig – User-specific settings. This is where options set with the --global flag are stored.
+$(prefix)/etc/gitconfig – System-wide settings.
+When options in these files conflict, local settings override user settings, which override system-wide.

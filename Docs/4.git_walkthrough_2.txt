@@ -1,0 +1,130 @@
+
+ 1. Getting help and Creating new repository 
+
+1.1. Target of this chapter 
+In this chapter you create Creating new repository. 
+
+1.2.Getting help & startingup
+Use the following command/s. 
+
+git help
+git help config 
+git config --global user.name "Contrib1"
+git config --global user.email "con1@cg.com"
+
+
+1.3. Creating new repository
+
+git init hello-repo
+cd hello-repo
+echo "hello world" > hello.txt
+git add hello.txt
+git commit -m "My first file archived in Git"
+git status 
+git log
+
+
+1.4.Editing and archiving a new file change 
+
+echo "hello git world" > hello.txt
+git status
+git add hello.txt 
+git commit -m "Second change on hello.txt"
+git log
+
+
+
+1.5. Working with Git branches 
+
+#Assuming the commit id of the last commit seen in the git log is a0802191f70e11d336e49e90318f834d49d33b86
+git branch oldmaster a0802191f70e11d336e49e90318f834d49d33b86
+git branch
+# shows the branches : list of named branches,
+the current one prefixed by *
+ 
+git checkout oldmaster
+#extracts from
+the Git repository all of the files associated to the commit pointed to branch
+
+cat hello.txt
+#shows the file content
+
+git checkout master
+cat hello.txt
+
+1.6. Working with remote Git repositories
+ 
+#Target is to add a remote called origin, pointing to a repository hosted on remote server 
+#Git allows different repositories to be connected together using the concept of
+remotes
+
+
+git remote add origin http://localhost:8080/ConProject2
+git remote –v
+
+#Note : The most common way to work with remotes is through the git clone command,
+which automatically performs the following operations:
+1. Creates a full clone of the remote Git repository into the local directory.
+2. Adds a remote called origin pointing to the remote original repository.
+3. Performs a checkout of the default branch (typically master) on the working
+directory.
+
+
+
+
+#The following example creates a new clone of hello-repo in the local directory
+hello-repo-cloned and displays its remotes' pointers and all local and remote
+tracked branches: (assuming you are already in master branch)
+
+cd ..
+git clone http://localhost:8080/ConProject2 hello-repo-cloned
+git remote –v
+git branch –a
+
+#Note :
+#Cloned repositories are fully featured local Git repositories, ready to be used for
+adding commits, branching, or merging as described previously. There are also
+additional functionalities provided by the remote repositories:
+• A local branch is tracked against the original remote branch from where it was cloned
+• All remote branches are available locally under the origin namespace
+• git fetch automatically retrieves and updates the reference to all remote branches into the local Git repository
+• git push sends the commits on the tracked branches to the remote repository
+
+
+2. Pushing branches to the remote repository 
+Target is to create an extra local commit on the master branch and pushes it to the remote repository
+
+2.1. working locally & then push the change to remote
+
+echo "Hi remote repo" >> hello.txt
+git commit -a -m "Sample for push"
+git push
+
+
+
+3. Fetching from remote repositories
+ 
+3.1. The fetch operation receives all updates from the branches of the remote repositories.
+In the following example, we fetch the remote branches from remote in original local repository hello-repo: 
+
+cd ../hello-repo
+git fetch
+
+#Note :
+The fetch does not have any effect on the target local branch master because the
+commits have been stored in the locally tracked remote branches.
+
+
+
+3.2. fetch 
+
+#Note : In order to get fetched commits into the local branches, we need to perform a merge
+operation with one of the strategies supported by Git (merge, rebase, or cherry pick).
+The recommended strategy when pulling changes from a remote repository is the
+rebase strategy:
+
+git rebase origin/master
+git log
+
+
+
