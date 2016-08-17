@@ -7,6 +7,8 @@ Configure your Git username and email using the following commands
 
 
 
+
+
 Note #
 Git stores configuration options in three separate files, which lets you scope options to individual repositories, users, or the entire system:
 
